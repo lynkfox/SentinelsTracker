@@ -14,19 +14,54 @@ Follow along on the progress of this project at: https://trello.com/b/O7C7mVJx/s
 
 Construction of a CodeFirst, Entity Framework SQL database to store the information from the Statistics Project google form in a much more readily available, searchable, and processible format.
 
-The conclusion of Phase 1 will come with a translator that will be able to move the data from the Google Sheets to the database.
+The conclusion of Phase 1 will come with a translator that will be able to move the data from the Google Sheets to the database, plus all the default data needed for dependencies in said database (ie: hero information in the Hero table to be used as a relation to the HeroTeams ect ect)
+
+*Specifically:
+
++ CodeFirst proceedures
++ Microsoft SQL server setup
++ Google Forms translated to the database
++ Basic CRUD operations on the proto website
+
 
 ### Phase 2: The Website (Part 1) :
 
 An ASP.Net, Razor and Bootstrap webpage with Docker Support that will provide a landing site, an entry form (for entering game information) and a statistics page to view various statistics. In addition, there will be a user system allowing users to track their own games and entries into the Statistics Project Database. 
 
-At the completion of Phase 2 this project will be deployed to live servers. 
+At the completion of Phase 2 this project will be deployed to live servers. (Possibly Azure?)
+
+*Specifically:
++ Entry form for entering new games
++ Entry validation
++ Statistics View
+	+ Overall
+	+ Indivdiual Characters/Entities
+	+ By User
+	+ By special categories (loss conditions, ect)
+	+ Searchable
++ User register
++ User Email verification
++ User Login
++ User Profile/Image
++ User retrieve games from old forms
++ User validation
++ User see own games
++ User Profile Edit
++ Super User ability to modify existing entries for editing purposes.
 
 ### Phase 3 : Android App :
 
 An android app that wil allow adding games to the database from the convience of your phone.
 
+*Specifically
++ User Login
++ See Own Games
++ Enter new game
++ Edit Profile
+
 ### Phase 4 : The Website (Part 2) : 
+
+Continue to upgrade the website with new services, such as randomizer, wiki integration, and difficulty calculator
 
 + Basic integration of the statistics with Wiki information ( https://sentinelswiki.com/ )
 + Difficulty Calculator
@@ -71,12 +106,29 @@ Looking for people with the following skills But if you don't have them, feel fr
 - SQL database queries
 - Java (for the android app)
 - Bootstrap - Other CSS/HTML5 Design options
-
-	ESPECIALLY THIS: It will be functional but it won't necessarily be the prettiest page...
+	**ESPECIALLY THIS: It will be functional but it won't necessarily be the prettiest page...**
 	
 - Javascript/Ajax queries
 
-Looking for in the future when we get that far:
+*Looking for in the future when we get that far:
 
 - Swift (for the iOS app)
 - REST API's
+
+## This project uses:
+
++ Microsoft C# Core 3.1 (preview)
++ Microsoft C# Asp.net core 3.14
++ Microsoft SQL servers
++ Docker
++ Bootstrap (version ###)
++ Javascript (version ###)
++ Razor
+
++ Eventually...
+	+ To be hosted on an Azure server (probably)
+	+ Swift (version)
+	+ (Java?C# for Mobile android?)
+	+ Whatever comes about ...
+	
+	
