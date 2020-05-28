@@ -8,14 +8,13 @@
     <PackageId>sentineltrackerwebsite</PackageId>
     <Version>0.0.1</Version>
     <Authors>Lynkfox</Authors>
-    <Company>CapstoneSoftware</Company>
-    <Product>sentinaltracker.online</Product>
     <Description>Sentinels Of the Multiverse Online Tracker for the Statistics Project</Description>
   </PropertyGroup>
 
 
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.4.4" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.1" Condition="'$(Configuration)' == 'Debug'" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.4" />

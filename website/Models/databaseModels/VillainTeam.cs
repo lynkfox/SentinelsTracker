@@ -29,6 +29,6 @@ namespace website.Models.databaseModels
         [ForeignKey("FourthVillain")]
         public Villain Fourth { get; set; }
         [ForeignKey("FifthVillain")]
-        publicVillain Fifth { get; set; }
+        public Villain Fifth { get; set; }
     }
 }
