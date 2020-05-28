@@ -15,7 +15,7 @@ namespace website.Models.databaseModels
 
         //fkey for usersers (1 to many)
         public int UserId { get; set; }
-        public User Username { get; set; }
+        public User User { get; set; }
 
 
         public string Platform { get; set; }
