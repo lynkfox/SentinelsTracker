@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace website.Models.databaseModels
 {
-    [Table("Environments", Schema = "gamedata")]
+    [Table("GameEnvironments", Schema = "gamedata")]
     public class GameEnvironment
     {
         [Key]

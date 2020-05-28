@@ -13,6 +13,8 @@ namespace website.Models.databaseModels
         public int ID { get; set; }
 
 
+        //Foreign Key relations
+
         //FKey for Games
         public int GameId { get; set; }
         public Game Game { get; set; }
@@ -21,48 +23,46 @@ namespace website.Models.databaseModels
         public int VillainTeamId { get; set; }
         public VillainTeam VillainTeam { get; set; }
 
-
         //Fkey for HeroTeams (1 to many)
         public int HeroTeamId { get; set; }
         public HeroTeam HeroTeam { get; set; }
 
-        //Fkey for GameEnvironments (1 to many)
+        /*Fkey for GameEnvironments (1 to many)
         [ForeignKey("Environment")]
-        [Display(Name="Environment: ")]
+        */
         public GameEnvironment Environment { get; set; }
+        
+
+
+        //Details of the game
 
         //These two fields are flags for what positions were incapped, and when. May also be used for Oblivaeon?
-        [StringLength(6)]
+        [StringLength(10)]
         public string HeroPositionsIncap { get; set; }
-        [StringLength(5)]
+        [StringLength(10)]
         public string VillainPostionsIncap { get; set; }
 
+
         //Players Perceieved Difficulty, 1-5 (how hard they felt the game was after the fact)
+        [Range(0,5)]
         public int PerceivedDifficulty { get; set; }
 
-        //Eenum - Normal, Advanced, Challenge, Ultimate
-        public GameModes GameMode { get; set; }
-
-        //Enum - Randomizer App, Thematic, Player Choice, Other
-        public SelectionMethods SelectionMethod { get; set; }
-
-        //Enum - Physical, Steam, iOS, Android, TableTopSimulator, Other
-        public Platforms Platform { get; set; }
         
+        public GameModes GameMode { get; set; }//Normal, Advanced, Challenge, Ultimate
+        public SelectionMethods SelectionMethod { get; set; }//Randomizer App, Thematic, Player Choice, Other
+        public Platforms Platform { get; set; }//Physical, Steam, iOS, Android, TableTopSimulator, Other
+        public GameEndConditions GameEndCondition { get; set; }//Enum - see below, lots of options
+
         //Enum - 0-15mins, 16-30mins, 31-45mins, 45-1h, 1hr-5hrs, 5+hrs
         public string GameTimeLength { get; set; }
 
+        [Range(1,6)]
         public int NumberOfPlayers { get; set; }
-
-        //Were any House rules used - Describe in Comment
         public bool HouseRules { get; set; }
 
         //Nullable because the user may not remember
         public int? Rounds { get; set; }
         public bool Win { get; set; }
-
-        //Enum - see below, lots of options
-        public GameEndConditions GameEndCondition { get; set; }
 
         [StringLength(1000)]
         public string UserComment { get; set; }
@@ -126,5 +126,7 @@ namespace website.Models.databaseModels
             IncapAbility, //A Hero Incap ability finished the game.
             Other //Prompt to describe in Comments
         }
+
+        
     }
 }

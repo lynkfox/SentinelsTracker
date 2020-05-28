@@ -21,6 +21,9 @@ namespace website.Models.databaseModels
 
 
         public string Platform { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime DateEntered { get; set; }
 
 

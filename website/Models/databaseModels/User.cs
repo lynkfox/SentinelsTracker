@@ -32,7 +32,6 @@ namespace website.Models.databaseModels
          * 
          * Luckily, this is a niche fan site that I can't see as getting very big or dangerous! :)
          */
-        public int UserPermissionID { get; set; }
         public UserPermission UserPermission { get; set; }
 
         public ICollection<Game> Games { get; set; }

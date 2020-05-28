@@ -18,6 +18,7 @@ namespace website.Models.databaseModels
         public string Description { get; set; }
         public string WikiLink { get; set; }
         public int PrintedDifficulty { get; set; }
+        public bool IsAlt { get; set; }
 
         //Fkey to Box Set 1 to many
         public int BoxSetId { get; set; }
@@ -25,6 +26,10 @@ namespace website.Models.databaseModels
 
         public string Image { get; set; }
 
-        public ICollection<VillainTeam> VillainTeams { get; set; }
+        public ICollection<VillainTeam> FirstPosition { get; set; }
+        public ICollection<VillainTeam> SecondPosition { get; set; }
+        public ICollection<VillainTeam> ThirdPosition { get; set; }
+        public ICollection<VillainTeam> FourthPosition { get; set; }
+        public ICollection<VillainTeam> FifthPosition { get; set; }
     }
 }
