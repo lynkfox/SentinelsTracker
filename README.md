@@ -16,7 +16,7 @@ Construction of a CodeFirst, Entity Framework SQL database to store the informat
 
 The conclusion of Phase 1 will come with a translator that will be able to move the data from the Google Sheets to the database, plus all the default data needed for dependencies in said database (ie: hero information in the Hero table to be used as a relation to the HeroTeams ect ect)
 
-*Specifically:
+*Specifically:*
 
 + CodeFirst proceedures
 + Microsoft SQL server setup
@@ -30,7 +30,8 @@ An ASP.Net, Razor and Bootstrap webpage with Docker Support that will provide a 
 
 At the completion of Phase 2 this project will be deployed to live servers. (Possibly Azure?)
 
-*Specifically:
+*Specifically:*
+
 + Entry form for entering new games
 + Entry validation
 + Statistics View
@@ -53,7 +54,8 @@ At the completion of Phase 2 this project will be deployed to live servers. (Pos
 
 An android app that wil allow adding games to the database from the convience of your phone.
 
-*Specifically
+*Specifically*
+
 + User Login
 + See Own Games
 + Enter new game
@@ -110,7 +112,7 @@ Looking for people with the following skills But if you don't have them, feel fr
 	
 - Javascript/Ajax queries
 
-*Looking for in the future when we get that far:
+*Looking for in the future when we get that far:*
 
 - Swift (for the iOS app)
 - REST API's
