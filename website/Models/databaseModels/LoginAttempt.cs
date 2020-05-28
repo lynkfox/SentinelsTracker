@@ -11,5 +11,6 @@ namespace website.Models.databaseModels
         public int? UserID { get; set; }
         public User User { get; set; }
         public DateTime AttemptTime { get; set; }
+        public string IPAddress { get; set; }
     }
 }

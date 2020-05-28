@@ -22,7 +22,20 @@ namespace website.Models.databaseModels
         [StringLength(250)]
         public string UserEmail { get; set; }
 
+
+        /*Security concerns.
+         * 
+         * Look. I am no security expert and I certainly am not good enough to really foil anything. I also have no experience beyond these simple things I'm doing here
+         * 
+         * So. If you have the experience and want to help, please do! Fork and Request a merge when you got it much better.
+         * 
+         * Luckily, this is a niche fan site that I can't see as getting very big or dangerous! :)
+         */
+        public int UserPermissionID { get; set; }
+        public UserPermission UserPermission { get; set; }
+
         public ICollection<Game> Games { get; set; }
         public ICollection<PasswordHistory> PasswordHistories { get; set; }
+        public ICollection<LoginAttempt> LoginAttempts { get; set; }
     }
 }
