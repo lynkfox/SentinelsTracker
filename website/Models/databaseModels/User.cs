@@ -23,5 +23,6 @@ namespace website.Models.databaseModels
         public string UserEmail { get; set; }
 
         public ICollection<Game> Games { get; set; }
+        public ICollection<PasswordHistory> PasswordHistories { get; set; }
     }
 }

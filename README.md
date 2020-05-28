@@ -77,21 +77,17 @@ Continue to upgrade the website with new services, such as randomizer, wiki inte
 It is unknown when these goals will be attained, but they are part of the eventual completed vision of this project. They are as follows, but not limited too:
 
 + An iOS app
-
 	At this time the team (read individual) behind this project does not have any experience coding an iOS app, but that isn't enough to stop them (me!). Just that this is further down the road in terms of goals.
 	
 + More advanced Wiki and Tracker integration
-
 	With the ability for the Wiki to pull statistics information from the Tracker and the Tracker to pull from the wiki.
 	
 + API - A way for others to tap into the database on request (without having direct access) to make use of the stastics data as they see fit
 
 + Integration of The Cauldron into the statistics database
-	
 	Once in a proper database, adding the Cauldron is much more simple than it was adding to the Google Forms.
 	
-+ House Rule Games
-	
++ House Rule Games (Such as Gloomweaver BBG rules)
 	Can be more easily excluded from the proper statistics (or seen with a click of a button)
 
 
@@ -134,3 +130,11 @@ Looking for people with the following skills But if you don't have them, feel fr
 	+ Whatever comes about ...
 	
 	
+	
+## Support This Project:
+
+This project takes a lot of time and effort, and is done completely on volunteer time. If you would like to support it, first see if you can help out in any of the above phases - if development and design isn't your thing, consider donating:
+
+*Just here for later. We're not accepting donations until this has cost something*
+
++ Buy us a Kofi - https://ko-fi.com/sentineltracker (Currently Not Accepting Donations)
