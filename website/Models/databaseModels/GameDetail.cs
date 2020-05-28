@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace website.Models.databaseModels
 {
+    [Table("GameDetails", Schema = "statistics")]
     public class GameDetail
     {
         public int ID { get; set; }

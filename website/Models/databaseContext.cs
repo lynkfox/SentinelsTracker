@@ -7,8 +7,26 @@ using website.Models.databaseModels;
 
 namespace website.Models
 {
-    public class databaseContext
+    public class DatabaseContext : DbContext
     {
+
+        public DatabaseContext(string connectionString) : base(GetOptions(connectionString))
+        {
+
+        }
+
+        public DatabaseContext(DbContextOptions options) : base(options)
+        {
+
+        }
+
+        private static DbContextOptions GetOptions(string cnn)
+        {
+            var modelBuilder = new DbContextOptionsBuilder();
+            return modelBuilder.UseSqlServer(cnn).Options;
+
+        }
+
         public DbSet<Game> Games { get; set; }
         public DbSet<GameDetail> GameDetails { get; set; }
         public DbSet<GameEnvironment> Environments { get; set; }

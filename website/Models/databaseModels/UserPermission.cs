@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace website.Models.databaseModels
 {
+    [Table("UserPermissions", Schema = "users")]
     public class UserPermission
     {
         [Key]

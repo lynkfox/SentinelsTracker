@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace website.Models.databaseModels
 {
+    [Table("VillainTeams", Schema = "statistics")]
     public class VillainTeam
     {
         public int ID { get; set; }
@@ -16,7 +17,8 @@ namespace website.Models.databaseModels
 
         //If this team villain is actually OblivAeon, and then the various Villains should point to Scions (OblivAeon is assumed)
         public bool OblivAeon { get; set; }
-        // Each Hero in the team is a FKey to the Hero character table
+
+        // Each Villain in the team is a FKey to the Villain character table. Most Second on will be Null
 
         [ForeignKey("FirstVillain")]
         public Villain First { get; set; }

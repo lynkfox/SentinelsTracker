@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace website.Models.databaseModels
 {
+    [Table("AccessLevels", Schema = "users")]
     public class AccessLevel
     {
         [Key]

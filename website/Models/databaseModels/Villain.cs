@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace website.Models.databaseModels
 {
+    [Table("VillainCharacters", Schema = "gamedata")]
     public class Villain
     {
         public int ID { get; set; }
