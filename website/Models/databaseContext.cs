@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
@@ -47,6 +48,12 @@ namespace website.Models
         //Fluid API to clean up some things
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            {
+                relationship.DeleteBehavior = DeleteBehavior.NoAction;
+            }
+
+
 
             //these define the Enums in GameDetails 
             modelBuilder.Entity<GameDetail>()
@@ -72,44 +79,6 @@ namespace website.Models
                 .IsRequired();
 
 
-
-            //Because there are multiple Fkeys to the same table for both HeroTeams and Villain teams, the relations are defined here.
-            modelBuilder.Entity<HeroTeam>()
-                .HasOne(x => x.First)
-                .WithMany(c => c.FirstPosition)
-                .IsRequired();
-            modelBuilder.Entity<HeroTeam>()
-                .HasOne(x => x.Second)
-                .WithMany(c => c.SecondPosition)
-                .IsRequired();
-            modelBuilder.Entity<HeroTeam>()
-                .HasOne(x => x.Third)
-                .WithMany(c => c.ThirdPosition)
-                .IsRequired();
-            modelBuilder.Entity<HeroTeam>()
-                .HasOne(x => x.Fourth)
-                .WithMany(c => c.FourthPosition);
-            modelBuilder.Entity<HeroTeam>()
-                .HasOne(x => x.Fifth)
-                .WithMany(c => c.FifthPosition);
-
-            modelBuilder.Entity<VillainTeam>()
-                .HasOne(x => x.First)
-                .WithMany(c => c.FirstPosition)
-                .IsRequired();
-            modelBuilder.Entity<VillainTeam>()
-                .HasOne(x => x.Second)
-                .WithMany(c => c.SecondPosition);
-            modelBuilder.Entity<VillainTeam>()
-                .HasOne(x => x.Third)
-                .WithMany(c => c.ThirdPosition);
-            modelBuilder.Entity<VillainTeam>()
-                .HasOne(x => x.Fourth)
-                .WithMany(c => c.FourthPosition);
-            modelBuilder.Entity<VillainTeam>()
-                .HasOne(x => x.Fifth)
-                .WithMany(c => c.FifthPosition);
-
             //Users and UserPermissions are a 1 to 1 relationship, this defines the parent/child
 
             modelBuilder.Entity<User>()
@@ -117,6 +86,8 @@ namespace website.Models
                 .WithOne(y => y.User)
                 .HasForeignKey<UserPermission>(y => y.UserId);
 
+
+            
         }
 
     }

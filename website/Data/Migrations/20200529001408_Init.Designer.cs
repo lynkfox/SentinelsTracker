@@ -10,8 +10,8 @@ using website.Models;
 namespace website.Data.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20200528192543_init")]
-    partial class init
+    [Migration("20200529001408_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -243,35 +243,32 @@ namespace website.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("FifthHero")
+                    b.Property<int?>("FifthHeroId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("FirstHero")
-                        .IsRequired()
+                    b.Property<int?>("FirstHeroId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("FourthHero")
+                    b.Property<int?>("FourthHeroId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("SecondHero")
-                        .IsRequired()
+                    b.Property<int?>("SecondHeroId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ThirdHero")
-                        .IsRequired()
+                    b.Property<int?>("ThirdHeroId")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("FifthHero");
+                    b.HasIndex("FifthHeroId");
 
-                    b.HasIndex("FirstHero");
+                    b.HasIndex("FirstHeroId");
 
-                    b.HasIndex("FourthHero");
+                    b.HasIndex("FourthHeroId");
 
-                    b.HasIndex("SecondHero");
+                    b.HasIndex("SecondHeroId");
 
-                    b.HasIndex("ThirdHero");
+                    b.HasIndex("ThirdHeroId");
 
                     b.ToTable("HeroTeams","statistics");
                 });
@@ -425,23 +422,22 @@ namespace website.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("FifthVillain")
+                    b.Property<int?>("FifthVillainId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("FirstVillain")
-                        .IsRequired()
+                    b.Property<int?>("FirstVillainId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("FourthVillain")
+                    b.Property<int?>("FourthVillainId")
                         .HasColumnType("int");
 
                     b.Property<bool>("OblivAeon")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("SecondVillain")
+                    b.Property<int?>("SecondVillainId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ThirdVillain")
+                    b.Property<int?>("ThirdVillainId")
                         .HasColumnType("int");
 
                     b.Property<bool>("VillainTeamGame")
@@ -449,15 +445,15 @@ namespace website.Data.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("FifthVillain");
+                    b.HasIndex("FifthVillainId");
 
-                    b.HasIndex("FirstVillain");
+                    b.HasIndex("FirstVillainId");
 
-                    b.HasIndex("FourthVillain");
+                    b.HasIndex("FourthVillainId");
 
-                    b.HasIndex("SecondVillain");
+                    b.HasIndex("SecondVillainId");
 
-                    b.HasIndex("ThirdVillain");
+                    b.HasIndex("ThirdVillainId");
 
                     b.ToTable("VillainTeams","statistics");
                 });
@@ -467,7 +463,7 @@ namespace website.Data.Migrations
                     b.HasOne("website.Models.databaseModels.User", "User")
                         .WithMany("Games")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 
@@ -476,7 +472,7 @@ namespace website.Data.Migrations
                     b.HasOne("website.Models.databaseModels.GameEnvironment", "Environment")
                         .WithMany()
                         .HasForeignKey("EnvironmentName")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("website.Models.databaseModels.GameEnvironment", null)
@@ -486,19 +482,19 @@ namespace website.Data.Migrations
                     b.HasOne("website.Models.databaseModels.Game", "Game")
                         .WithOne("GameDetails")
                         .HasForeignKey("website.Models.databaseModels.GameDetail", "GameId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("website.Models.databaseModels.HeroTeam", "HeroTeam")
                         .WithMany()
                         .HasForeignKey("HeroTeamId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("website.Models.databaseModels.VillainTeam", "VillainTeam")
                         .WithMany()
                         .HasForeignKey("VillainTeamId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 
@@ -507,7 +503,7 @@ namespace website.Data.Migrations
                     b.HasOne("website.Models.databaseModels.BoxSet", "BoxSet")
                         .WithMany("GameEnvironments")
                         .HasForeignKey("BoxSetId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 
@@ -516,44 +512,44 @@ namespace website.Data.Migrations
                     b.HasOne("website.Models.databaseModels.BoxSet", "BoxSet")
                         .WithMany("Heroes")
                         .HasForeignKey("BoxSetId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("website.Models.databaseModels.HeroTeam", b =>
                 {
-                    b.HasOne("website.Models.databaseModels.Hero", "Fifth")
+                    b.HasOne("website.Models.databaseModels.Hero", "FifthHero")
                         .WithMany("FifthPosition")
-                        .HasForeignKey("FifthHero");
+                        .HasForeignKey("FifthHeroId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("website.Models.databaseModels.Hero", "First")
+                    b.HasOne("website.Models.databaseModels.Hero", "FirstHero")
                         .WithMany("FirstPosition")
-                        .HasForeignKey("FirstHero")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FirstHeroId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("website.Models.databaseModels.Hero", "Fourth")
+                    b.HasOne("website.Models.databaseModels.Hero", "FourthHero")
                         .WithMany("FourthPosition")
-                        .HasForeignKey("FourthHero");
+                        .HasForeignKey("FourthHeroId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("website.Models.databaseModels.Hero", "Second")
+                    b.HasOne("website.Models.databaseModels.Hero", "SecondHero")
                         .WithMany("SecondPosition")
-                        .HasForeignKey("SecondHero")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SecondHeroId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("website.Models.databaseModels.Hero", "Third")
+                    b.HasOne("website.Models.databaseModels.Hero", "ThirdHero")
                         .WithMany("ThirdPosition")
-                        .HasForeignKey("ThirdHero")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ThirdHeroId")
+                        .OnDelete(DeleteBehavior.NoAction);
                 });
 
             modelBuilder.Entity("website.Models.databaseModels.LoginAttempt", b =>
                 {
                     b.HasOne("website.Models.databaseModels.User", "User")
                         .WithMany("LoginAttempts")
-                        .HasForeignKey("UserID");
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.NoAction);
                 });
 
             modelBuilder.Entity("website.Models.databaseModels.PasswordHistory", b =>
@@ -561,7 +557,7 @@ namespace website.Data.Migrations
                     b.HasOne("website.Models.databaseModels.User", "User")
                         .WithMany("PasswordHistories")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 
@@ -570,13 +566,13 @@ namespace website.Data.Migrations
                     b.HasOne("website.Models.databaseModels.AccessLevel", "AccessLevel")
                         .WithMany("UserPermissions")
                         .HasForeignKey("AccessLevelId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("website.Models.databaseModels.User", "User")
                         .WithOne("UserPermission")
                         .HasForeignKey("website.Models.databaseModels.UserPermission", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 
@@ -585,33 +581,36 @@ namespace website.Data.Migrations
                     b.HasOne("website.Models.databaseModels.BoxSet", "BoxSet")
                         .WithMany("Villains")
                         .HasForeignKey("BoxSetId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("website.Models.databaseModels.VillainTeam", b =>
                 {
-                    b.HasOne("website.Models.databaseModels.Villain", "Fifth")
+                    b.HasOne("website.Models.databaseModels.Villain", "FifthVillain")
                         .WithMany("FifthPosition")
-                        .HasForeignKey("FifthVillain");
+                        .HasForeignKey("FifthVillainId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("website.Models.databaseModels.Villain", "First")
+                    b.HasOne("website.Models.databaseModels.Villain", "FirstVillain")
                         .WithMany("FirstPosition")
-                        .HasForeignKey("FirstVillain")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FirstVillainId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("website.Models.databaseModels.Villain", "Fourth")
+                    b.HasOne("website.Models.databaseModels.Villain", "FourthVillain")
                         .WithMany("FourthPosition")
-                        .HasForeignKey("FourthVillain");
+                        .HasForeignKey("FourthVillainId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("website.Models.databaseModels.Villain", "Second")
+                    b.HasOne("website.Models.databaseModels.Villain", "SecondVillain")
                         .WithMany("SecondPosition")
-                        .HasForeignKey("SecondVillain");
+                        .HasForeignKey("SecondVillainId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("website.Models.databaseModels.Villain", "Third")
+                    b.HasOne("website.Models.databaseModels.Villain", "ThirdVillain")
                         .WithMany("ThirdPosition")
-                        .HasForeignKey("ThirdVillain");
+                        .HasForeignKey("ThirdVillainId")
+                        .OnDelete(DeleteBehavior.NoAction);
                 });
 #pragma warning restore 612, 618
         }

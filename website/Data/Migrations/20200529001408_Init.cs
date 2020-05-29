@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace website.Data.Migrations
 {
-    public partial class init : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -88,8 +88,7 @@ namespace website.Data.Migrations
                         column: x => x.BoxSetId,
                         principalSchema: "gamedata",
                         principalTable: "BoxSets",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ID");
                 });
 
             migrationBuilder.CreateTable(
@@ -115,8 +114,7 @@ namespace website.Data.Migrations
                         column: x => x.BoxSetId,
                         principalSchema: "gamedata",
                         principalTable: "BoxSets",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ID");
                 });
 
             migrationBuilder.CreateTable(
@@ -143,8 +141,7 @@ namespace website.Data.Migrations
                         column: x => x.BoxSetId,
                         principalSchema: "gamedata",
                         principalTable: "BoxSets",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ID");
                 });
 
             migrationBuilder.CreateTable(
@@ -166,8 +163,7 @@ namespace website.Data.Migrations
                         column: x => x.UserID,
                         principalSchema: "users",
                         principalTable: "Users",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "ID");
                 });
 
             migrationBuilder.CreateTable(
@@ -190,8 +186,7 @@ namespace website.Data.Migrations
                         column: x => x.UserId,
                         principalSchema: "users",
                         principalTable: "Users",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ID");
                 });
 
             migrationBuilder.CreateTable(
@@ -213,8 +208,7 @@ namespace website.Data.Migrations
                         column: x => x.UserId,
                         principalSchema: "users",
                         principalTable: "Users",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ID");
                 });
 
             migrationBuilder.CreateTable(
@@ -237,15 +231,13 @@ namespace website.Data.Migrations
                         column: x => x.AccessLevelId,
                         principalSchema: "users",
                         principalTable: "AccessLevels",
-                        principalColumn: "Level",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Level");
                     table.ForeignKey(
                         name: "FK_UserPermissions_Users_UserId",
                         column: x => x.UserId,
                         principalSchema: "users",
                         principalTable: "Users",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ID");
                 });
 
             migrationBuilder.CreateTable(
@@ -255,50 +247,45 @@ namespace website.Data.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstHero = table.Column<int>(nullable: false),
-                    SecondHero = table.Column<int>(nullable: false),
-                    ThirdHero = table.Column<int>(nullable: false),
-                    FourthHero = table.Column<int>(nullable: true),
-                    FifthHero = table.Column<int>(nullable: true)
+                    FirstHeroId = table.Column<int>(nullable: true),
+                    SecondHeroId = table.Column<int>(nullable: true),
+                    ThirdHeroId = table.Column<int>(nullable: true),
+                    FourthHeroId = table.Column<int>(nullable: true),
+                    FifthHeroId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_HeroTeams", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_HeroTeams_HeroCharacters_FifthHero",
-                        column: x => x.FifthHero,
+                        name: "FK_HeroTeams_HeroCharacters_FifthHeroId",
+                        column: x => x.FifthHeroId,
                         principalSchema: "gamedata",
                         principalTable: "HeroCharacters",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "ID");
                     table.ForeignKey(
-                        name: "FK_HeroTeams_HeroCharacters_FirstHero",
-                        column: x => x.FirstHero,
+                        name: "FK_HeroTeams_HeroCharacters_FirstHeroId",
+                        column: x => x.FirstHeroId,
                         principalSchema: "gamedata",
                         principalTable: "HeroCharacters",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ID");
                     table.ForeignKey(
-                        name: "FK_HeroTeams_HeroCharacters_FourthHero",
-                        column: x => x.FourthHero,
+                        name: "FK_HeroTeams_HeroCharacters_FourthHeroId",
+                        column: x => x.FourthHeroId,
                         principalSchema: "gamedata",
                         principalTable: "HeroCharacters",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "ID");
                     table.ForeignKey(
-                        name: "FK_HeroTeams_HeroCharacters_SecondHero",
-                        column: x => x.SecondHero,
+                        name: "FK_HeroTeams_HeroCharacters_SecondHeroId",
+                        column: x => x.SecondHeroId,
                         principalSchema: "gamedata",
                         principalTable: "HeroCharacters",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ID");
                     table.ForeignKey(
-                        name: "FK_HeroTeams_HeroCharacters_ThirdHero",
-                        column: x => x.ThirdHero,
+                        name: "FK_HeroTeams_HeroCharacters_ThirdHeroId",
+                        column: x => x.ThirdHeroId,
                         principalSchema: "gamedata",
                         principalTable: "HeroCharacters",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ID");
                 });
 
             migrationBuilder.CreateTable(
@@ -310,50 +297,45 @@ namespace website.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     VillainTeamGame = table.Column<bool>(nullable: false),
                     OblivAeon = table.Column<bool>(nullable: false),
-                    FirstVillain = table.Column<int>(nullable: false),
-                    SecondVillain = table.Column<int>(nullable: true),
-                    ThirdVillain = table.Column<int>(nullable: true),
-                    FourthVillain = table.Column<int>(nullable: true),
-                    FifthVillain = table.Column<int>(nullable: true)
+                    FirstVillainId = table.Column<int>(nullable: true),
+                    SecondVillainId = table.Column<int>(nullable: true),
+                    ThirdVillainId = table.Column<int>(nullable: true),
+                    FourthVillainId = table.Column<int>(nullable: true),
+                    FifthVillainId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_VillainTeams", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_VillainTeams_VillainCharacters_FifthVillain",
-                        column: x => x.FifthVillain,
+                        name: "FK_VillainTeams_VillainCharacters_FifthVillainId",
+                        column: x => x.FifthVillainId,
                         principalSchema: "gamedata",
                         principalTable: "VillainCharacters",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "ID");
                     table.ForeignKey(
-                        name: "FK_VillainTeams_VillainCharacters_FirstVillain",
-                        column: x => x.FirstVillain,
+                        name: "FK_VillainTeams_VillainCharacters_FirstVillainId",
+                        column: x => x.FirstVillainId,
                         principalSchema: "gamedata",
                         principalTable: "VillainCharacters",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ID");
                     table.ForeignKey(
-                        name: "FK_VillainTeams_VillainCharacters_FourthVillain",
-                        column: x => x.FourthVillain,
+                        name: "FK_VillainTeams_VillainCharacters_FourthVillainId",
+                        column: x => x.FourthVillainId,
                         principalSchema: "gamedata",
                         principalTable: "VillainCharacters",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "ID");
                     table.ForeignKey(
-                        name: "FK_VillainTeams_VillainCharacters_SecondVillain",
-                        column: x => x.SecondVillain,
+                        name: "FK_VillainTeams_VillainCharacters_SecondVillainId",
+                        column: x => x.SecondVillainId,
                         principalSchema: "gamedata",
                         principalTable: "VillainCharacters",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "ID");
                     table.ForeignKey(
-                        name: "FK_VillainTeams_VillainCharacters_ThirdVillain",
-                        column: x => x.ThirdVillain,
+                        name: "FK_VillainTeams_VillainCharacters_ThirdVillainId",
+                        column: x => x.ThirdVillainId,
                         principalSchema: "gamedata",
                         principalTable: "VillainCharacters",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "ID");
                 });
 
             migrationBuilder.CreateTable(
@@ -391,8 +373,7 @@ namespace website.Data.Migrations
                         column: x => x.EnvironmentName,
                         principalSchema: "gamedata",
                         principalTable: "GameEnvironments",
-                        principalColumn: "Name",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Name");
                     table.ForeignKey(
                         name: "FK_GameDetails_GameEnvironments_GameEnvironmentName",
                         column: x => x.GameEnvironmentName,
@@ -405,22 +386,19 @@ namespace website.Data.Migrations
                         column: x => x.GameId,
                         principalSchema: "statistics",
                         principalTable: "Games",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ID");
                     table.ForeignKey(
                         name: "FK_GameDetails_HeroTeams_HeroTeamId",
                         column: x => x.HeroTeamId,
                         principalSchema: "statistics",
                         principalTable: "HeroTeams",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ID");
                     table.ForeignKey(
                         name: "FK_GameDetails_VillainTeams_VillainTeamId",
                         column: x => x.VillainTeamId,
                         principalSchema: "statistics",
                         principalTable: "VillainTeams",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ID");
                 });
 
             migrationBuilder.CreateIndex(
@@ -491,64 +469,64 @@ namespace website.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_HeroTeams_FifthHero",
+                name: "IX_HeroTeams_FifthHeroId",
                 schema: "statistics",
                 table: "HeroTeams",
-                column: "FifthHero");
+                column: "FifthHeroId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_HeroTeams_FirstHero",
+                name: "IX_HeroTeams_FirstHeroId",
                 schema: "statistics",
                 table: "HeroTeams",
-                column: "FirstHero");
+                column: "FirstHeroId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_HeroTeams_FourthHero",
+                name: "IX_HeroTeams_FourthHeroId",
                 schema: "statistics",
                 table: "HeroTeams",
-                column: "FourthHero");
+                column: "FourthHeroId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_HeroTeams_SecondHero",
+                name: "IX_HeroTeams_SecondHeroId",
                 schema: "statistics",
                 table: "HeroTeams",
-                column: "SecondHero");
+                column: "SecondHeroId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_HeroTeams_ThirdHero",
+                name: "IX_HeroTeams_ThirdHeroId",
                 schema: "statistics",
                 table: "HeroTeams",
-                column: "ThirdHero");
+                column: "ThirdHeroId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_VillainTeams_FifthVillain",
+                name: "IX_VillainTeams_FifthVillainId",
                 schema: "statistics",
                 table: "VillainTeams",
-                column: "FifthVillain");
+                column: "FifthVillainId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_VillainTeams_FirstVillain",
+                name: "IX_VillainTeams_FirstVillainId",
                 schema: "statistics",
                 table: "VillainTeams",
-                column: "FirstVillain");
+                column: "FirstVillainId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_VillainTeams_FourthVillain",
+                name: "IX_VillainTeams_FourthVillainId",
                 schema: "statistics",
                 table: "VillainTeams",
-                column: "FourthVillain");
+                column: "FourthVillainId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_VillainTeams_SecondVillain",
+                name: "IX_VillainTeams_SecondVillainId",
                 schema: "statistics",
                 table: "VillainTeams",
-                column: "SecondVillain");
+                column: "SecondVillainId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_VillainTeams_ThirdVillain",
+                name: "IX_VillainTeams_ThirdVillainId",
                 schema: "statistics",
                 table: "VillainTeams",
-                column: "ThirdVillain");
+                column: "ThirdVillainId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserPermissions_AccessLevelId",

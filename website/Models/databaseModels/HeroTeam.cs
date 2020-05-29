@@ -15,14 +15,33 @@ namespace website.Models.databaseModels
         // Each Hero in the team is a FKey to the Hero character table
 
         [ForeignKey("FirstHero")]
-        public Hero First { get; set; }
+        public int? FirstHeroId { get; set; }
+        public Hero FirstHero { get; set; }
+
+
         [ForeignKey("SecondHero")]
-        public Hero Second { get; set; }
+        public int? SecondHeroId { get; set; }
+        public Hero SecondHero { get; set; }
+
         [ForeignKey("ThirdHero")]
-        public Hero Third { get; set; }
+        public int? ThirdHeroId { get; set; }
+        public Hero ThirdHero { get; set; }
+
         [ForeignKey("FourthHero")]
-        public Hero Fourth { get; set; }
+        public int? FourthHeroId { get; set; }
+        public Hero FourthHero { get; set; }
+
         [ForeignKey("FifthHero")]
-        public Hero Fifth { get; set; }
+        public int? FifthHeroId { get; set; }
+        public Hero FifthHero { get; set; }
+
+
+
+
+
+
+
+
+
     }
 }

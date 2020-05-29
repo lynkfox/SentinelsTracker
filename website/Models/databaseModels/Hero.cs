@@ -21,13 +21,23 @@ namespace website.Models.databaseModels
         public int BoxSetId { get; set; }
         public BoxSet BoxSet { get; set; }
 
-
         public string Image { get; set; }
 
+
+
+        [InverseProperty("FirstHero")]
         public ICollection<HeroTeam> FirstPosition { get; set; }
+
+        [InverseProperty("SecondHero")]
         public ICollection<HeroTeam> SecondPosition { get; set; }
+
+        [InverseProperty("ThirdHero")]
         public ICollection<HeroTeam> ThirdPosition { get; set; }
+
+        [InverseProperty("FourthHero")]
         public ICollection<HeroTeam> FourthPosition { get; set; }
+
+        [InverseProperty("FifthHero")]
         public ICollection<HeroTeam> FifthPosition { get; set; }
     }
 }

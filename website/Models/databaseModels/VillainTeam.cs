@@ -21,15 +21,24 @@ namespace website.Models.databaseModels
         // Each Villain in the team is a FKey to the Villain character table. Most Second on will be Null
 
         [ForeignKey("FirstVillain")]
-        [Required]
-        public Villain First { get; set; }
+        public int? FirstVillainId { get; set; }
+        public Villain FirstVillain { get; set; }
+
+
         [ForeignKey("SecondVillain")]
-        public Villain Second { get; set; }
+        public int? SecondVillainId { get; set; }
+        public Villain SecondVillain { get; set; }
+
         [ForeignKey("ThirdVillain")]
-        public Villain Third { get; set; }
+        public int? ThirdVillainId { get; set; }
+        public Villain ThirdVillain { get; set; }
+
         [ForeignKey("FourthVillain")]
-        public Villain Fourth { get; set; }
+        public int? FourthVillainId { get; set; }
+        public Villain FourthVillain { get; set; }
+
         [ForeignKey("FifthVillain")]
-        public Villain Fifth { get; set; }
+        public int? FifthVillainId { get; set; }
+        public Villain FifthVillain { get; set; }
     }
 }

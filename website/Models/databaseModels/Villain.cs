@@ -26,10 +26,19 @@ namespace website.Models.databaseModels
 
         public string Image { get; set; }
 
+        [InverseProperty("FirstVillain")]
         public ICollection<VillainTeam> FirstPosition { get; set; }
+
+        [InverseProperty("SecondVillain")]
         public ICollection<VillainTeam> SecondPosition { get; set; }
+
+        [InverseProperty("ThirdVillain")]
         public ICollection<VillainTeam> ThirdPosition { get; set; }
+
+        [InverseProperty("FourthVillain")]
         public ICollection<VillainTeam> FourthPosition { get; set; }
+
+        [InverseProperty("FifthVillain")]
         public ICollection<VillainTeam> FifthPosition { get; set; }
     }
 }
