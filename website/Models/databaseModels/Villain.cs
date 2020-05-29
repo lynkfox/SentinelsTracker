@@ -18,7 +18,6 @@ namespace website.Models.databaseModels
         public string Description { get; set; }
         public string WikiLink { get; set; }
         public int PrintedDifficulty { get; set; }
-        public bool IsAlt { get; set; }
 
         //Fkey to Box Set 1 to many
         public int BoxSetId { get; set; }

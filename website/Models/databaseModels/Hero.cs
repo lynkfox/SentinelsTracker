@@ -12,6 +12,7 @@ namespace website.Models.databaseModels
 
         [Display(Name = "Hero Name: ")]
         public string Name { get; set; }
+        public string Team { get; set; }
         public string Description { get; set; }
         public string WikiLink { get; set; }
         public int PrintedComplexity { get; set; }
