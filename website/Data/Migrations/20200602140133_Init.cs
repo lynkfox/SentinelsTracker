@@ -8,6 +8,9 @@ namespace website.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
+                name: "logging");
+
+            migrationBuilder.EnsureSchema(
                 name: "users");
 
             migrationBuilder.EnsureSchema(
@@ -16,9 +19,6 @@ namespace website.Data.Migrations
             migrationBuilder.EnsureSchema(
                 name: "statistics");
 
-            migrationBuilder.EnsureSchema(
-                name: "logging");
-
             migrationBuilder.CreateTable(
                 name: "BoxSets",
                 schema: "gamedata",
@@ -26,11 +26,11 @@ namespace website.Data.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
-                    PublicationDate = table.Column<string>(nullable: true),
-                    WikiLink = table.Column<string>(nullable: true),
-                    Image = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(maxLength: 250, nullable: false),
+                    Description = table.Column<string>(maxLength: 500, nullable: true),
+                    PublicationDate = table.Column<string>(maxLength: 25, nullable: true),
+                    WikiLink = table.Column<string>(maxLength: 75, nullable: true),
+                    Image = table.Column<string>(maxLength: 75, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -60,10 +60,12 @@ namespace website.Data.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Username = table.Column<string>(maxLength: 250, nullable: true),
-                    Profile = table.Column<string>(nullable: true),
-                    UserIcon = table.Column<string>(nullable: true),
-                    UserEmail = table.Column<string>(maxLength: 250, nullable: true)
+                    Username = table.Column<string>(maxLength: 250, nullable: false),
+                    Profile = table.Column<string>(maxLength: 500, nullable: true),
+                    UserIcon = table.Column<string>(maxLength: 75, nullable: true),
+                    UserEmail = table.Column<string>(maxLength: 250, nullable: true),
+                    HasClaimed = table.Column<bool>(nullable: false),
+                    Locked = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -75,14 +77,17 @@ namespace website.Data.Migrations
                 schema: "gamedata",
                 columns: table => new
                 {
-                    Name = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: true),
-                    WikiLink = table.Column<string>(nullable: true),
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(maxLength: 250, nullable: false),
+                    Description = table.Column<string>(maxLength: 500, nullable: true),
+                    WikiLink = table.Column<string>(maxLength: 75, nullable: true),
+                    Image = table.Column<string>(maxLength: 75, nullable: true),
                     BoxSetId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GameEnvironments", x => x.Name);
+                    table.PrimaryKey("PK_GameEnvironments", x => x.ID);
                     table.ForeignKey(
                         name: "FK_GameEnvironments_BoxSets_BoxSetId",
                         column: x => x.BoxSetId,
@@ -98,13 +103,15 @@ namespace website.Data.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
-                    WikiLink = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(maxLength: 250, nullable: false),
+                    Team = table.Column<string>(maxLength: 100, nullable: true),
+                    Description = table.Column<string>(maxLength: 500, nullable: true),
+                    WikiLink = table.Column<string>(maxLength: 75, nullable: true),
                     PrintedComplexity = table.Column<int>(nullable: false),
                     IsAlt = table.Column<bool>(nullable: false),
+                    BaseHero = table.Column<string>(maxLength: 250, nullable: true),
                     BoxSetId = table.Column<int>(nullable: false),
-                    Image = table.Column<string>(nullable: true)
+                    Image = table.Column<string>(maxLength: 75, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -124,14 +131,14 @@ namespace website.Data.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true),
-                    Type = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
-                    WikiLink = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(maxLength: 250, nullable: false),
+                    Type = table.Column<string>(nullable: false),
+                    BaseName = table.Column<string>(maxLength: 250, nullable: true),
+                    Description = table.Column<string>(maxLength: 500, nullable: true),
+                    WikiLink = table.Column<string>(maxLength: 75, nullable: true),
+                    Image = table.Column<string>(maxLength: 75, nullable: true),
                     PrintedDifficulty = table.Column<int>(nullable: false),
-                    IsAlt = table.Column<bool>(nullable: false),
-                    BoxSetId = table.Column<int>(nullable: false),
-                    Image = table.Column<string>(nullable: true)
+                    BoxSetId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -145,13 +152,42 @@ namespace website.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AccessChanges",
+                schema: "logging",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(nullable: false),
+                    AccessLevelId = table.Column<int>(nullable: false),
+                    ChangedOn = table.Column<DateTime>(nullable: false),
+                    Reason = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AccessChanges", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_AccessChanges_AccessLevels_AccessLevelId",
+                        column: x => x.AccessLevelId,
+                        principalSchema: "users",
+                        principalTable: "AccessLevels",
+                        principalColumn: "Level");
+                    table.ForeignKey(
+                        name: "FK_AccessChanges_Users_UserId",
+                        column: x => x.UserId,
+                        principalSchema: "users",
+                        principalTable: "Users",
+                        principalColumn: "ID");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "LoginAttempts",
                 schema: "logging",
                 columns: table => new
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserID = table.Column<int>(nullable: true),
+                    UserID = table.Column<int>(nullable: false),
                     AttemptTime = table.Column<DateTime>(nullable: false),
                     IPAddress = table.Column<string>(nullable: true)
                 },
@@ -196,8 +232,7 @@ namespace website.Data.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(nullable: false),
-                    Platform = table.Column<string>(nullable: true),
+                    UserId = table.Column<int>(nullable: true),
                     DateEntered = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -241,48 +276,93 @@ namespace website.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "GameDetails",
+                schema: "statistics",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    GameId = table.Column<int>(nullable: false),
+                    PerceivedDifficulty = table.Column<int>(nullable: false),
+                    GameMode = table.Column<string>(nullable: false),
+                    SelectionMethod = table.Column<string>(nullable: false),
+                    Platform = table.Column<string>(nullable: false),
+                    GameEndCondition = table.Column<string>(nullable: false),
+                    GameTimeLength = table.Column<string>(nullable: false),
+                    HouseRule = table.Column<string>(nullable: false),
+                    NumberOfPlayers = table.Column<int>(nullable: false),
+                    Rounds = table.Column<int>(nullable: true),
+                    Win = table.Column<bool>(nullable: false),
+                    UserComment = table.Column<string>(maxLength: 5000, nullable: true),
+                    OtherSelections = table.Column<string>(maxLength: 1000, nullable: true),
+                    CalculatedDifficulty = table.Column<double>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GameDetails", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_GameDetails_Games_GameId",
+                        column: x => x.GameId,
+                        principalSchema: "statistics",
+                        principalTable: "Games",
+                        principalColumn: "ID");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EnvironmentsUsed",
+                schema: "statistics",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    GameDetailId = table.Column<int>(nullable: false),
+                    GameEnvironmentId = table.Column<int>(nullable: false),
+                    Destroyed = table.Column<bool>(nullable: false),
+                    OblivAeonZone = table.Column<int>(nullable: false),
+                    OblivAeonOrderAppeared = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EnvironmentsUsed", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_EnvironmentsUsed_GameDetails_GameDetailId",
+                        column: x => x.GameDetailId,
+                        principalSchema: "statistics",
+                        principalTable: "GameDetails",
+                        principalColumn: "ID");
+                    table.ForeignKey(
+                        name: "FK_EnvironmentsUsed_GameEnvironments_GameEnvironmentId",
+                        column: x => x.GameEnvironmentId,
+                        principalSchema: "gamedata",
+                        principalTable: "GameEnvironments",
+                        principalColumn: "ID");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "HeroTeams",
                 schema: "statistics",
                 columns: table => new
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstHeroId = table.Column<int>(nullable: true),
-                    SecondHeroId = table.Column<int>(nullable: true),
-                    ThirdHeroId = table.Column<int>(nullable: true),
-                    FourthHeroId = table.Column<int>(nullable: true),
-                    FifthHeroId = table.Column<int>(nullable: true)
+                    GameDetailId = table.Column<int>(nullable: false),
+                    HeroId = table.Column<int>(nullable: false),
+                    Position = table.Column<int>(nullable: false),
+                    Incapped = table.Column<bool>(nullable: false),
+                    OblivAeonIncapOrder = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_HeroTeams", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_HeroTeams_HeroCharacters_FifthHeroId",
-                        column: x => x.FifthHeroId,
-                        principalSchema: "gamedata",
-                        principalTable: "HeroCharacters",
+                        name: "FK_HeroTeams_GameDetails_GameDetailId",
+                        column: x => x.GameDetailId,
+                        principalSchema: "statistics",
+                        principalTable: "GameDetails",
                         principalColumn: "ID");
                     table.ForeignKey(
-                        name: "FK_HeroTeams_HeroCharacters_FirstHeroId",
-                        column: x => x.FirstHeroId,
-                        principalSchema: "gamedata",
-                        principalTable: "HeroCharacters",
-                        principalColumn: "ID");
-                    table.ForeignKey(
-                        name: "FK_HeroTeams_HeroCharacters_FourthHeroId",
-                        column: x => x.FourthHeroId,
-                        principalSchema: "gamedata",
-                        principalTable: "HeroCharacters",
-                        principalColumn: "ID");
-                    table.ForeignKey(
-                        name: "FK_HeroTeams_HeroCharacters_SecondHeroId",
-                        column: x => x.SecondHeroId,
-                        principalSchema: "gamedata",
-                        principalTable: "HeroCharacters",
-                        principalColumn: "ID");
-                    table.ForeignKey(
-                        name: "FK_HeroTeams_HeroCharacters_ThirdHeroId",
-                        column: x => x.ThirdHeroId,
+                        name: "FK_HeroTeams_HeroCharacters_HeroId",
+                        column: x => x.HeroId,
                         principalSchema: "gamedata",
                         principalTable: "HeroCharacters",
                         principalColumn: "ID");
@@ -296,108 +376,26 @@ namespace website.Data.Migrations
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     VillainTeamGame = table.Column<bool>(nullable: false),
+                    Position = table.Column<int>(nullable: false),
+                    Incapped = table.Column<bool>(nullable: false),
                     OblivAeon = table.Column<bool>(nullable: false),
-                    FirstVillainId = table.Column<int>(nullable: true),
-                    SecondVillainId = table.Column<int>(nullable: true),
-                    ThirdVillainId = table.Column<int>(nullable: true),
-                    FourthVillainId = table.Column<int>(nullable: true),
-                    FifthVillainId = table.Column<int>(nullable: true)
+                    VillainId = table.Column<int>(nullable: false),
+                    GameDetailID = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_VillainTeams", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_VillainTeams_VillainCharacters_FifthVillainId",
-                        column: x => x.FifthVillainId,
-                        principalSchema: "gamedata",
-                        principalTable: "VillainCharacters",
-                        principalColumn: "ID");
-                    table.ForeignKey(
-                        name: "FK_VillainTeams_VillainCharacters_FirstVillainId",
-                        column: x => x.FirstVillainId,
-                        principalSchema: "gamedata",
-                        principalTable: "VillainCharacters",
-                        principalColumn: "ID");
-                    table.ForeignKey(
-                        name: "FK_VillainTeams_VillainCharacters_FourthVillainId",
-                        column: x => x.FourthVillainId,
-                        principalSchema: "gamedata",
-                        principalTable: "VillainCharacters",
-                        principalColumn: "ID");
-                    table.ForeignKey(
-                        name: "FK_VillainTeams_VillainCharacters_SecondVillainId",
-                        column: x => x.SecondVillainId,
-                        principalSchema: "gamedata",
-                        principalTable: "VillainCharacters",
-                        principalColumn: "ID");
-                    table.ForeignKey(
-                        name: "FK_VillainTeams_VillainCharacters_ThirdVillainId",
-                        column: x => x.ThirdVillainId,
-                        principalSchema: "gamedata",
-                        principalTable: "VillainCharacters",
-                        principalColumn: "ID");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "GameDetails",
-                schema: "statistics",
-                columns: table => new
-                {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    GameId = table.Column<int>(nullable: false),
-                    VillainTeamId = table.Column<int>(nullable: false),
-                    HeroTeamId = table.Column<int>(nullable: false),
-                    EnvironmentName = table.Column<string>(nullable: false),
-                    HeroPositionsIncap = table.Column<string>(maxLength: 10, nullable: true),
-                    VillainPostionsIncap = table.Column<string>(maxLength: 10, nullable: true),
-                    PerceivedDifficulty = table.Column<int>(nullable: false),
-                    GameMode = table.Column<string>(nullable: false),
-                    SelectionMethod = table.Column<string>(nullable: false),
-                    Platform = table.Column<string>(nullable: false),
-                    GameEndCondition = table.Column<string>(nullable: false),
-                    GameTimeLength = table.Column<string>(nullable: true),
-                    NumberOfPlayers = table.Column<int>(nullable: false),
-                    HouseRules = table.Column<bool>(nullable: false),
-                    Rounds = table.Column<int>(nullable: true),
-                    Win = table.Column<bool>(nullable: false),
-                    UserComment = table.Column<string>(maxLength: 1000, nullable: true),
-                    CalculatedDifficulty = table.Column<double>(nullable: false),
-                    GameEnvironmentName = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_GameDetails", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_GameDetails_GameEnvironments_EnvironmentName",
-                        column: x => x.EnvironmentName,
-                        principalSchema: "gamedata",
-                        principalTable: "GameEnvironments",
-                        principalColumn: "Name");
-                    table.ForeignKey(
-                        name: "FK_GameDetails_GameEnvironments_GameEnvironmentName",
-                        column: x => x.GameEnvironmentName,
-                        principalSchema: "gamedata",
-                        principalTable: "GameEnvironments",
-                        principalColumn: "Name",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_GameDetails_Games_GameId",
-                        column: x => x.GameId,
+                        name: "FK_VillainTeams_GameDetails_GameDetailID",
+                        column: x => x.GameDetailID,
                         principalSchema: "statistics",
-                        principalTable: "Games",
+                        principalTable: "GameDetails",
                         principalColumn: "ID");
                     table.ForeignKey(
-                        name: "FK_GameDetails_HeroTeams_HeroTeamId",
-                        column: x => x.HeroTeamId,
-                        principalSchema: "statistics",
-                        principalTable: "HeroTeams",
-                        principalColumn: "ID");
-                    table.ForeignKey(
-                        name: "FK_GameDetails_VillainTeams_VillainTeamId",
-                        column: x => x.VillainTeamId,
-                        principalSchema: "statistics",
-                        principalTable: "VillainTeams",
+                        name: "FK_VillainTeams_VillainCharacters_VillainId",
+                        column: x => x.VillainId,
+                        principalSchema: "gamedata",
+                        principalTable: "VillainCharacters",
                         principalColumn: "ID");
                 });
 
@@ -420,6 +418,18 @@ namespace website.Data.Migrations
                 column: "BoxSetId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AccessChanges_AccessLevelId",
+                schema: "logging",
+                table: "AccessChanges",
+                column: "AccessLevelId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AccessChanges_UserId",
+                schema: "logging",
+                table: "AccessChanges",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_LoginAttempts_UserID",
                 schema: "logging",
                 table: "LoginAttempts",
@@ -432,16 +442,16 @@ namespace website.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_GameDetails_EnvironmentName",
+                name: "IX_EnvironmentsUsed_GameDetailId",
                 schema: "statistics",
-                table: "GameDetails",
-                column: "EnvironmentName");
+                table: "EnvironmentsUsed",
+                column: "GameDetailId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_GameDetails_GameEnvironmentName",
+                name: "IX_EnvironmentsUsed_GameEnvironmentId",
                 schema: "statistics",
-                table: "GameDetails",
-                column: "GameEnvironmentName");
+                table: "EnvironmentsUsed",
+                column: "GameEnvironmentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_GameDetails_GameId",
@@ -451,82 +461,34 @@ namespace website.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_GameDetails_HeroTeamId",
-                schema: "statistics",
-                table: "GameDetails",
-                column: "HeroTeamId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_GameDetails_VillainTeamId",
-                schema: "statistics",
-                table: "GameDetails",
-                column: "VillainTeamId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Games_UserId",
                 schema: "statistics",
                 table: "Games",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_HeroTeams_FifthHeroId",
+                name: "IX_HeroTeams_GameDetailId",
                 schema: "statistics",
                 table: "HeroTeams",
-                column: "FifthHeroId");
+                column: "GameDetailId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_HeroTeams_FirstHeroId",
+                name: "IX_HeroTeams_HeroId",
                 schema: "statistics",
                 table: "HeroTeams",
-                column: "FirstHeroId");
+                column: "HeroId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_HeroTeams_FourthHeroId",
-                schema: "statistics",
-                table: "HeroTeams",
-                column: "FourthHeroId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_HeroTeams_SecondHeroId",
-                schema: "statistics",
-                table: "HeroTeams",
-                column: "SecondHeroId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_HeroTeams_ThirdHeroId",
-                schema: "statistics",
-                table: "HeroTeams",
-                column: "ThirdHeroId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_VillainTeams_FifthVillainId",
+                name: "IX_VillainTeams_GameDetailID",
                 schema: "statistics",
                 table: "VillainTeams",
-                column: "FifthVillainId");
+                column: "GameDetailID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_VillainTeams_FirstVillainId",
+                name: "IX_VillainTeams_VillainId",
                 schema: "statistics",
                 table: "VillainTeams",
-                column: "FirstVillainId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_VillainTeams_FourthVillainId",
-                schema: "statistics",
-                table: "VillainTeams",
-                column: "FourthVillainId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_VillainTeams_SecondVillainId",
-                schema: "statistics",
-                table: "VillainTeams",
-                column: "SecondVillainId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_VillainTeams_ThirdVillainId",
-                schema: "statistics",
-                table: "VillainTeams",
-                column: "ThirdVillainId");
+                column: "VillainId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserPermissions_AccessLevelId",
@@ -545,6 +507,10 @@ namespace website.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "AccessChanges",
+                schema: "logging");
+
+            migrationBuilder.DropTable(
                 name: "LoginAttempts",
                 schema: "logging");
 
@@ -553,19 +519,7 @@ namespace website.Data.Migrations
                 schema: "logging");
 
             migrationBuilder.DropTable(
-                name: "GameDetails",
-                schema: "statistics");
-
-            migrationBuilder.DropTable(
-                name: "UserPermissions",
-                schema: "users");
-
-            migrationBuilder.DropTable(
-                name: "GameEnvironments",
-                schema: "gamedata");
-
-            migrationBuilder.DropTable(
-                name: "Games",
+                name: "EnvironmentsUsed",
                 schema: "statistics");
 
             migrationBuilder.DropTable(
@@ -577,24 +531,40 @@ namespace website.Data.Migrations
                 schema: "statistics");
 
             migrationBuilder.DropTable(
-                name: "AccessLevels",
+                name: "UserPermissions",
                 schema: "users");
 
             migrationBuilder.DropTable(
-                name: "Users",
-                schema: "users");
+                name: "GameEnvironments",
+                schema: "gamedata");
 
             migrationBuilder.DropTable(
                 name: "HeroCharacters",
                 schema: "gamedata");
 
             migrationBuilder.DropTable(
+                name: "GameDetails",
+                schema: "statistics");
+
+            migrationBuilder.DropTable(
                 name: "VillainCharacters",
                 schema: "gamedata");
 
             migrationBuilder.DropTable(
+                name: "AccessLevels",
+                schema: "users");
+
+            migrationBuilder.DropTable(
+                name: "Games",
+                schema: "statistics");
+
+            migrationBuilder.DropTable(
                 name: "BoxSets",
                 schema: "gamedata");
+
+            migrationBuilder.DropTable(
+                name: "Users",
+                schema: "users");
         }
     }
 }

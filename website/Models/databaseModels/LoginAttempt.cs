@@ -12,8 +12,13 @@ namespace website.Models.databaseModels
     {
         [Key]
         public int ID { get; set; }
-        public int? UserID { get; set; }
+
+        //Fkey the many side of a 1 to many.
+        public int UserID { get; set; }
         public User User { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm:ss}", ApplyFormatInEditMode = true)]
         public DateTime AttemptTime { get; set; }
         public string IPAddress { get; set; }
     }

@@ -14,31 +14,18 @@ namespace website.Models.databaseModels
 
         //If this "team" is not a team at all but just a single villain, set false
         public bool VillainTeamGame { get; set; }
+        //For team games - turn order 1-6 (6 for house rules). 1 or 0 is also used for Solo (Default to 0)
+        public int Position { get; set; }
+        public bool Incapped { get; set; }
 
-        //If this team villain is actually OblivAeon, and then the various Villains should point to Scions (OblivAeon is assumed)
+        //If Any of the Villains attached to the same GameDetails show up as True in this field, then the controllers
+        // will assume OblivAeon was also involved. This should only be set true for Scions.
         public bool OblivAeon { get; set; }
 
-        // Each Villain in the team is a FKey to the Villain character table. Most Second on will be Null
+        public int VillainId { get; set; }
+        public Villain Villain { get; set; }
 
-        [ForeignKey("FirstVillain")]
-        public int? FirstVillainId { get; set; }
-        public Villain FirstVillain { get; set; }
+        
 
-
-        [ForeignKey("SecondVillain")]
-        public int? SecondVillainId { get; set; }
-        public Villain SecondVillain { get; set; }
-
-        [ForeignKey("ThirdVillain")]
-        public int? ThirdVillainId { get; set; }
-        public Villain ThirdVillain { get; set; }
-
-        [ForeignKey("FourthVillain")]
-        public int? FourthVillainId { get; set; }
-        public Villain FourthVillain { get; set; }
-
-        [ForeignKey("FifthVillain")]
-        public int? FifthVillainId { get; set; }
-        public Villain FifthVillain { get; set; }
     }
 }

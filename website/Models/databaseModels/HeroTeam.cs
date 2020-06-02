@@ -12,28 +12,29 @@ namespace website.Models.databaseModels
     {
         public int ID { get; set; }
 
-        // Each Hero in the team is a FKey to the Hero character table
+        //Fkey for GameDetails - 1 to many (This is the many side)
+        public int GameDetailId { get; set; }
+        public GameDetail GameDetail { get; set; }
 
-        [ForeignKey("FirstHero")]
-        public int? FirstHeroId { get; set; }
-        public Hero FirstHero { get; set; }
+        //FKey for Hero. 1 to many. (This is the many side)
+        public int HeroId { get; set; }
+        public Hero Hero { get; set; }
+
+        //Position referes to Play Order - 1-5 (6 allowed for HouseRules of 6 player games)
+        [Range(1,6)]
+        [Required]
+        public int Position { get; set; }
+
+        //True indicates this hero was incapped during the game
+        [Required]
+        public bool Incapped { get; set; }
+
+        //The order in which this hero was played during OblivAeon games - 0 would be the first hero played (or non OblivAeon Game).
+        //1 would be the first hero to replace in the same position, 2 the next ect. 
+        // So several heroes in a single OblivAeon game can have the same IncapOrder number - but need to have different positional numbers.
+        public int OblivAeonIncapOrder { get; set; }
 
 
-        [ForeignKey("SecondHero")]
-        public int? SecondHeroId { get; set; }
-        public Hero SecondHero { get; set; }
-
-        [ForeignKey("ThirdHero")]
-        public int? ThirdHeroId { get; set; }
-        public Hero ThirdHero { get; set; }
-
-        [ForeignKey("FourthHero")]
-        public int? FourthHeroId { get; set; }
-        public Hero FourthHero { get; set; }
-
-        [ForeignKey("FifthHero")]
-        public int? FifthHeroId { get; set; }
-        public Hero FifthHero { get; set; }
 
 
 

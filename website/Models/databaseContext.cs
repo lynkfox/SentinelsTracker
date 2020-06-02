@@ -10,15 +10,15 @@ using website.Models.databaseModels;
 
 namespace website.Models
 {
-    public class DatabaseContext : DbContext
+    public class databaseContext : DbContext
     {
 
-        public DatabaseContext(string connectionString) : base(GetOptions(connectionString))
+        public databaseContext(string connectionString) : base(GetOptions(connectionString))
         {
 
         }
 
-        public DatabaseContext(DbContextOptions options) : base(options)
+        public databaseContext(DbContextOptions options) : base(options)
         {
 
         }
@@ -55,7 +55,7 @@ namespace website.Models
 
 
 
-            //these define the Enums in GameDetails 
+            //these define the Enums
             modelBuilder.Entity<GameDetail>()
                 .Property(x => x.Platform)
                 .HasConversion(x => x.ToString(), x => (GameDetail.Platforms)Enum.Parse(typeof(GameDetail.Platforms), x));
@@ -72,11 +72,18 @@ namespace website.Models
                 .Property(x => x.GameEndCondition)
                 .HasConversion(x => x.ToString(), x => (GameDetail.GameEndConditions)Enum.Parse(typeof(GameDetail.GameEndConditions), x));
 
-            //Annotations was being a brat so GameEnvironment FKey in GameDetails is defined here.
             modelBuilder.Entity<GameDetail>()
-                .HasOne(x => x.Environment)
-                .WithMany()
-                .IsRequired();
+                .Property(x => x.GameTimeLength)
+                .HasConversion(x => x.ToString(), x => (GameDetail.GameTimeLengths)Enum.Parse(typeof(GameDetail.GameTimeLengths), x));
+
+            modelBuilder.Entity<GameDetail>()
+                .Property(x => x.HouseRule)
+                .HasConversion(x => x.ToString(), x => (GameDetail.HouseRules)Enum.Parse(typeof(GameDetail.HouseRules), x));
+
+            modelBuilder.Entity<Villain>()
+                .Property(x => x.Type)
+                .HasConversion(x => x.ToString(), x => (Villain.Types)Enum.Parse(typeof(Villain.Types), x));
+
 
 
             //Users and UserPermissions are a 1 to 1 relationship, this defines the parent/child

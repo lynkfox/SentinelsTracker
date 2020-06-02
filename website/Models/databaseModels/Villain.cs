@@ -12,32 +12,43 @@ namespace website.Models.databaseModels
     {
         public int ID { get; set; }
 
+        [Required]
         [Display(Name = "Villan Name: ")]
+        [StringLength(250)]
         public string Name { get; set; }
-        public string Type { get; set; }
+
+
+        [Required]
+        public Types Type { get; set; }
+
+        //The name of the original this is a vairant of. Null if none
+        [Display(Name = "Variant of: ")]
+        [StringLength(250)]
+        public string BaseName { get; set; }
+        [StringLength(500)]
         public string Description { get; set; }
+        [StringLength(75)]
         public string WikiLink { get; set; }
+        [StringLength(75)]
+        public string Image { get; set; }
+
+        [Required]
         public int PrintedDifficulty { get; set; }
 
         //Fkey to Box Set 1 to many
         public int BoxSetId { get; set; }
         public BoxSet BoxSet { get; set; }
 
-        public string Image { get; set; }
+        //Fkey the one side of a one to many.
+        public ICollection<VillainTeam> VillainTeams { get; set; }
 
-        [InverseProperty("FirstVillain")]
-        public ICollection<VillainTeam> FirstPosition { get; set; }
 
-        [InverseProperty("SecondVillain")]
-        public ICollection<VillainTeam> SecondPosition { get; set; }
-
-        [InverseProperty("ThirdVillain")]
-        public ICollection<VillainTeam> ThirdPosition { get; set; }
-
-        [InverseProperty("FourthVillain")]
-        public ICollection<VillainTeam> FourthPosition { get; set; }
-
-        [InverseProperty("FifthVillain")]
-        public ICollection<VillainTeam> FifthPosition { get; set; }
+        public enum Types
+        {
+            Solo,
+            Alt,
+            Team,
+            Scion
+        }
     }
 }

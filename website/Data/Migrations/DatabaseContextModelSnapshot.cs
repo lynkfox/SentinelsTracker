@@ -8,8 +8,8 @@ using website.Models;
 
 namespace website.Data.Migrations
 {
-    [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(databaseContext))]
+    partial class databaseContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -18,6 +18,34 @@ namespace website.Data.Migrations
                 .HasAnnotation("ProductVersion", "3.1.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("website.Models.databaseModels.AccessChange", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AccessLevelId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ChangedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Reason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("AccessLevelId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AccessChanges","logging");
+                });
 
             modelBuilder.Entity("website.Models.databaseModels.AccessLevel", b =>
                 {
@@ -48,23 +76,60 @@ namespace website.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(500)")
+                        .HasMaxLength(500);
 
                     b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(75)")
+                        .HasMaxLength(75);
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
 
                     b.Property<string>("PublicationDate")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(25)")
+                        .HasMaxLength(25);
 
                     b.Property<string>("WikiLink")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(75)")
+                        .HasMaxLength(75);
 
                     b.HasKey("ID");
 
                     b.ToTable("BoxSets","gamedata");
+                });
+
+            modelBuilder.Entity("website.Models.databaseModels.EnvironmentUsed", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Destroyed")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("GameDetailId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GameEnvironmentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OblivAeonOrderAppeared")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OblivAeonZone")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("GameDetailId");
+
+                    b.HasIndex("GameEnvironmentId");
+
+                    b.ToTable("EnvironmentsUsed","statistics");
                 });
 
             modelBuilder.Entity("website.Models.databaseModels.Game", b =>
@@ -77,10 +142,7 @@ namespace website.Data.Migrations
                     b.Property<DateTime>("DateEntered")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Platform")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
@@ -100,16 +162,9 @@ namespace website.Data.Migrations
                     b.Property<double>("CalculatedDifficulty")
                         .HasColumnType("float");
 
-                    b.Property<string>("EnvironmentName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("GameEndCondition")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("GameEnvironmentName")
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("GameId")
                         .HasColumnType("int");
@@ -119,20 +174,19 @@ namespace website.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("GameTimeLength")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("HeroPositionsIncap")
-                        .HasColumnType("nvarchar(10)")
-                        .HasMaxLength(10);
-
-                    b.Property<int>("HeroTeamId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("HouseRules")
-                        .HasColumnType("bit");
+                    b.Property<string>("HouseRule")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("NumberOfPlayers")
                         .HasColumnType("int");
+
+                    b.Property<string>("OtherSelections")
+                        .HasColumnType("nvarchar(1000)")
+                        .HasMaxLength(1000);
 
                     b.Property<int>("PerceivedDifficulty")
                         .HasColumnType("int");
@@ -149,50 +203,48 @@ namespace website.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserComment")
-                        .HasColumnType("nvarchar(1000)")
-                        .HasMaxLength(1000);
-
-                    b.Property<string>("VillainPostionsIncap")
-                        .HasColumnType("nvarchar(10)")
-                        .HasMaxLength(10);
-
-                    b.Property<int>("VillainTeamId")
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(max)")
+                        .HasMaxLength(5000);
 
                     b.Property<bool>("Win")
                         .HasColumnType("bit");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("EnvironmentName");
-
-                    b.HasIndex("GameEnvironmentName");
-
                     b.HasIndex("GameId")
                         .IsUnique();
-
-                    b.HasIndex("HeroTeamId");
-
-                    b.HasIndex("VillainTeamId");
 
                     b.ToTable("GameDetails","statistics");
                 });
 
             modelBuilder.Entity("website.Models.databaseModels.GameEnvironment", b =>
                 {
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("BoxSetId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(500)")
+                        .HasMaxLength(500);
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(75)")
+                        .HasMaxLength(75);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
 
                     b.Property<string>("WikiLink")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(75)")
+                        .HasMaxLength(75);
 
-                    b.HasKey("Name");
+                    b.HasKey("ID");
 
                     b.HasIndex("BoxSetId");
 
@@ -206,29 +258,39 @@ namespace website.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("BaseHero")
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
+
                     b.Property<int>("BoxSetId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(500)")
+                        .HasMaxLength(500);
 
                     b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(75)")
+                        .HasMaxLength(75);
 
                     b.Property<bool>("IsAlt")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
 
                     b.Property<int>("PrintedComplexity")
                         .HasColumnType("int");
 
                     b.Property<string>("Team")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<string>("WikiLink")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(75)")
+                        .HasMaxLength(75);
 
                     b.HasKey("ID");
 
@@ -244,32 +306,26 @@ namespace website.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("FifthHeroId")
+                    b.Property<int>("GameDetailId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("FirstHeroId")
+                    b.Property<int>("HeroId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("FourthHeroId")
+                    b.Property<bool>("Incapped")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("OblivAeonIncapOrder")
                         .HasColumnType("int");
 
-                    b.Property<int?>("SecondHeroId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ThirdHeroId")
+                    b.Property<int>("Position")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("FifthHeroId");
+                    b.HasIndex("GameDetailId");
 
-                    b.HasIndex("FirstHeroId");
-
-                    b.HasIndex("FourthHeroId");
-
-                    b.HasIndex("SecondHeroId");
-
-                    b.HasIndex("ThirdHeroId");
+                    b.HasIndex("HeroId");
 
                     b.ToTable("HeroTeams","statistics");
                 });
@@ -287,7 +343,7 @@ namespace website.Data.Migrations
                     b.Property<string>("IPAddress")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserID")
+                    b.Property<int>("UserID")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
@@ -330,17 +386,26 @@ namespace website.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool>("HasClaimed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Locked")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Profile")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(500)")
+                        .HasMaxLength(500);
 
                     b.Property<string>("UserEmail")
                         .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("UserIcon")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(75)")
+                        .HasMaxLength(75);
 
                     b.Property<string>("Username")
+                        .IsRequired()
                         .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
@@ -385,26 +450,36 @@ namespace website.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("BaseName")
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
+
                     b.Property<int>("BoxSetId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(500)")
+                        .HasMaxLength(500);
 
                     b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(75)")
+                        .HasMaxLength(75);
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
 
                     b.Property<int>("PrintedDifficulty")
                         .HasColumnType("int");
 
                     b.Property<string>("Type")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("WikiLink")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(75)")
+                        .HasMaxLength(75);
 
                     b.HasKey("ID");
 
@@ -420,22 +495,19 @@ namespace website.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("FifthVillainId")
+                    b.Property<int?>("GameDetailID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("FirstVillainId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("FourthVillainId")
-                        .HasColumnType("int");
+                    b.Property<bool>("Incapped")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("OblivAeon")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("SecondVillainId")
+                    b.Property<int>("Position")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ThirdVillainId")
+                    b.Property<int>("VillainId")
                         .HasColumnType("int");
 
                     b.Property<bool>("VillainTeamGame")
@@ -443,17 +515,41 @@ namespace website.Data.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("FifthVillainId");
+                    b.HasIndex("GameDetailID");
 
-                    b.HasIndex("FirstVillainId");
-
-                    b.HasIndex("FourthVillainId");
-
-                    b.HasIndex("SecondVillainId");
-
-                    b.HasIndex("ThirdVillainId");
+                    b.HasIndex("VillainId");
 
                     b.ToTable("VillainTeams","statistics");
+                });
+
+            modelBuilder.Entity("website.Models.databaseModels.AccessChange", b =>
+                {
+                    b.HasOne("website.Models.databaseModels.AccessLevel", "AccessLevel")
+                        .WithMany("AccessChanges")
+                        .HasForeignKey("AccessLevelId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("website.Models.databaseModels.User", "User")
+                        .WithMany("AccessChanges")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("website.Models.databaseModels.EnvironmentUsed", b =>
+                {
+                    b.HasOne("website.Models.databaseModels.GameDetail", "GameDetail")
+                        .WithMany("EnvironmentsUsed")
+                        .HasForeignKey("GameDetailId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("website.Models.databaseModels.GameEnvironment", "GameEnvironment")
+                        .WithMany("EnvironmentsUsed")
+                        .HasForeignKey("GameEnvironmentId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("website.Models.databaseModels.Game", b =>
@@ -461,37 +557,14 @@ namespace website.Data.Migrations
                     b.HasOne("website.Models.databaseModels.User", "User")
                         .WithMany("Games")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
                 });
 
             modelBuilder.Entity("website.Models.databaseModels.GameDetail", b =>
                 {
-                    b.HasOne("website.Models.databaseModels.GameEnvironment", "Environment")
-                        .WithMany()
-                        .HasForeignKey("EnvironmentName")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("website.Models.databaseModels.GameEnvironment", null)
-                        .WithMany("GameDetails")
-                        .HasForeignKey("GameEnvironmentName");
-
                     b.HasOne("website.Models.databaseModels.Game", "Game")
-                        .WithOne("GameDetails")
+                        .WithOne("GameDetail")
                         .HasForeignKey("website.Models.databaseModels.GameDetail", "GameId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("website.Models.databaseModels.HeroTeam", "HeroTeam")
-                        .WithMany()
-                        .HasForeignKey("HeroTeamId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("website.Models.databaseModels.VillainTeam", "VillainTeam")
-                        .WithMany()
-                        .HasForeignKey("VillainTeamId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
@@ -516,30 +589,17 @@ namespace website.Data.Migrations
 
             modelBuilder.Entity("website.Models.databaseModels.HeroTeam", b =>
                 {
-                    b.HasOne("website.Models.databaseModels.Hero", "FifthHero")
-                        .WithMany("FifthPosition")
-                        .HasForeignKey("FifthHeroId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                    b.HasOne("website.Models.databaseModels.GameDetail", "GameDetail")
+                        .WithMany("HeroTeams")
+                        .HasForeignKey("GameDetailId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
-                    b.HasOne("website.Models.databaseModels.Hero", "FirstHero")
-                        .WithMany("FirstPosition")
-                        .HasForeignKey("FirstHeroId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("website.Models.databaseModels.Hero", "FourthHero")
-                        .WithMany("FourthPosition")
-                        .HasForeignKey("FourthHeroId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("website.Models.databaseModels.Hero", "SecondHero")
-                        .WithMany("SecondPosition")
-                        .HasForeignKey("SecondHeroId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("website.Models.databaseModels.Hero", "ThirdHero")
-                        .WithMany("ThirdPosition")
-                        .HasForeignKey("ThirdHeroId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                    b.HasOne("website.Models.databaseModels.Hero", "Hero")
+                        .WithMany("HeroTeams")
+                        .HasForeignKey("HeroId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("website.Models.databaseModels.LoginAttempt", b =>
@@ -547,7 +607,8 @@ namespace website.Data.Migrations
                     b.HasOne("website.Models.databaseModels.User", "User")
                         .WithMany("LoginAttempts")
                         .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("website.Models.databaseModels.PasswordHistory", b =>
@@ -585,30 +646,16 @@ namespace website.Data.Migrations
 
             modelBuilder.Entity("website.Models.databaseModels.VillainTeam", b =>
                 {
-                    b.HasOne("website.Models.databaseModels.Villain", "FifthVillain")
-                        .WithMany("FifthPosition")
-                        .HasForeignKey("FifthVillainId")
+                    b.HasOne("website.Models.databaseModels.GameDetail", null)
+                        .WithMany("VillainTeams")
+                        .HasForeignKey("GameDetailID")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("website.Models.databaseModels.Villain", "FirstVillain")
-                        .WithMany("FirstPosition")
-                        .HasForeignKey("FirstVillainId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("website.Models.databaseModels.Villain", "FourthVillain")
-                        .WithMany("FourthPosition")
-                        .HasForeignKey("FourthVillainId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("website.Models.databaseModels.Villain", "SecondVillain")
-                        .WithMany("SecondPosition")
-                        .HasForeignKey("SecondVillainId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("website.Models.databaseModels.Villain", "ThirdVillain")
-                        .WithMany("ThirdPosition")
-                        .HasForeignKey("ThirdVillainId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                    b.HasOne("website.Models.databaseModels.Villain", "Villain")
+                        .WithMany("VillainTeams")
+                        .HasForeignKey("VillainId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

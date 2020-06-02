@@ -7,27 +7,23 @@ using System.Threading.Tasks;
 
 namespace website.Models.databaseModels
 {
-    [Table("Games", Schema = "statistics")]
-    public class Game
+    [Table("AccessChanges", Schema = "logging")]
+    public class AccessChange
     {
-
-        [Key]
-        [Display(Name = "Game ID Number: ")]
         public int ID { get; set; }
 
-        //fkey for usersers (1 to many)
-        //null because there may not be a user associated with this.
-        public int? UserId { get; set; }
+        //Fkey - one to many (this is the many side)
+        public int UserId { get; set; }
         public User User { get; set; }
 
+        //Fkey one to many (this is the many side)
+        [Display(Name="Access Level Changed To: ")]
+        public int AccessLevelId { get; set; }
+        public AccessLevel AccessLevel { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm:ss}", ApplyFormatInEditMode = true)]
-        public DateTime DateEntered { get; set; }
-
-
-        //Fkey from GameDetails (1 to 1 relationship)
-        public GameDetail GameDetail { get; set; }
-
+        public DateTime ChangedOn { get; set; }
+        public string Reason { get; set; }
     }
 }

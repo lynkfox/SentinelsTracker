@@ -16,6 +16,9 @@ namespace website.Models.databaseModels
         public bool Modify { get; set; }
         public string LevelCommonName { get; set; }
 
+
+        //Fkeys - This is the 1 side to the 1 to many
         public ICollection<UserPermission> UserPermissions { get; set; }
+        public ICollection<AccessChange> AccessChanges { get; set; }
     }
 }
