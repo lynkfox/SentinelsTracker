@@ -28,7 +28,7 @@ namespace website
         {
             services.AddControllersWithViews();
 
-            services.AddDbContext<databaseContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(Configuration.GetConnectionString("UploadConnection")));
 
         }
 

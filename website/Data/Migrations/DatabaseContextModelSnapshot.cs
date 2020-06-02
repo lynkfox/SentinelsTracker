@@ -8,7 +8,7 @@ using website.Models;
 
 namespace website.Data.Migrations
 {
-    [DbContext(typeof(databaseContext))]
+    [DbContext(typeof(DatabaseContext))]
     partial class databaseContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

@@ -9,7 +9,7 @@ using website.Models;
 
 namespace website.Data.Migrations
 {
-    [DbContext(typeof(databaseContext))]
+    [DbContext(typeof(DatabaseContext))]
     [Migration("20200602140133_Init")]
     partial class Init
     {

@@ -10,15 +10,15 @@ using website.Models.databaseModels;
 
 namespace website.Models
 {
-    public class databaseContext : DbContext
+    public class DatabaseContext : DbContext
     {
 
-        public databaseContext(string connectionString) : base(GetOptions(connectionString))
+        public DatabaseContext(string connectionString) : base(GetOptions(connectionString))
         {
 
         }
 
-        public databaseContext(DbContextOptions options) : base(options)
+        public DatabaseContext(DbContextOptions options) : base(options)
         {
 
         }
@@ -96,6 +96,11 @@ namespace website.Models
 
             
         }
+
+
+
+        //Fluid API to clean up some things
+        public DbSet<website.Models.databaseModels.BoxSet> BoxSet { get; set; }
 
     }
 
