@@ -47,7 +47,6 @@ namespace website.Controllers
 
             _db.AddOrUpdateRange<GameEnvironment>(sheetReader.ReadEnvironment(SpreadsheetId, existingBoxes));
 
-            _db.AddRange();
 
             await _db.SaveChangesAsync();
 

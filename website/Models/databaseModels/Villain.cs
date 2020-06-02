@@ -50,7 +50,8 @@ namespace website.Models.databaseModels
             Solo,
             Alt,
             Team,
-            Scion
+            Scion,
+            OblivAeon
         }
 
 

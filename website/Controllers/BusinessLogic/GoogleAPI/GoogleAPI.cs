@@ -1,6 +1,7 @@
 ﻿using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.Sheets.v4;
+using Google.Apis.Sheets.v4.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore.Storage;
 using System;
@@ -48,12 +49,9 @@ namespace website.Controllers.BusinessLogic.GoogleAPI
 
         }
 
-
-        public List<BoxSet> ReadBoxes(string SpreadsheetId)
+        private ValueRange GetValues(string SpreadsheetId, string sheetName)
         {
-
-            var boxSetsFromGoogleSheets = new List<BoxSet>();
-            var range = $"{sheet}!A:F";
+            var range = $"{sheetName}!A:L";
 
             //sets the Request we are going to use with Execute, with the Spreadsheet ID and the Range
             SpreadsheetsResource.ValuesResource.GetRequest request =
@@ -61,9 +59,16 @@ namespace website.Controllers.BusinessLogic.GoogleAPI
 
             //Captures the Sheet
             var response = request.Execute();
+            return response;
+        }
 
+
+        public List<BoxSet> ReadBoxes(string SpreadsheetId)
+        {
+
+            var boxSetsFromGoogleSheets = new List<BoxSet>();
             //puts the values of each column(?)row? into a list of lists of objects
-            IList<IList<object>> values = response.Values;
+            IList<IList<object>> values = GetValues(SpreadsheetId, "BoxSets").Values;
 
             bool firstRow = true;
             if (values != null && values.Count > 0)
@@ -98,22 +103,92 @@ namespace website.Controllers.BusinessLogic.GoogleAPI
             return boxSetsFromGoogleSheets;
         }
 
+        internal List<Hero> ReadHero(string SpreadsheetId, List<BoxSet> boxSetsFromDB)
+        {
+            var heroFromGoogleSheet = new List<Hero>();
+            IList<IList<object>> values = GetValues(SpreadsheetId, "Heroes").Values;
 
+            bool firstRow = true;
+            if (values != null && values.Count > 0)
+            {
+                foreach (var row in values)
+                {
+                    if (firstRow)
+                    {
+                        //Skip Column Headers
+                        firstRow = false;
+                        continue;
+                    }
+
+                    Hero hero = new Hero()
+                    {
+                        ID = int.Parse(row[0].ToString()),
+                        Name = row[1].ToString(),
+                        Team = string.IsNullOrEmpty(row[2].ToString()) ? null : row[2].ToString(),
+                        Description = row[3].ToString(),
+                        WikiLink = row[4].ToString(),
+                        PrintedComplexity = int.Parse(row[5].ToString()),
+                        IsAlt = bool.Parse(row[6].ToString()),
+                        BaseHero = string.IsNullOrEmpty(row[7].ToString()) ? null : row[7].ToString(),
+                        BoxSet = boxSetsFromDB.Where(x => x.Name == row[8].ToString()).FirstOrDefault(),
+                        Image = "default"
+
+                    };
+
+
+                    heroFromGoogleSheet.Add(hero);
+
+                }
+            }
+
+            return heroFromGoogleSheet;
+        }
+
+
+        internal List<Villain> ReadVillain(string SpreadsheetId, List<BoxSet> boxSetsFromDB)
+        {
+            var villainFromGoogleSheet = new List<Villain>();
+            IList<IList<object>> values = GetValues(SpreadsheetId, "Villains").Values;
+
+            bool firstRow = true;
+            if (values != null && values.Count > 0)
+            {
+                foreach (var row in values)
+                {
+                    if (firstRow)
+                    {
+                        //Skip Column Headers
+                        firstRow = false;
+                        continue;
+                    }
+
+                    Villain villain = new Villain()
+                    {
+                        ID = int.Parse(row[0].ToString()),
+                        Name = row[1].ToString(),
+                        Type = (Villain.Types)Enum.Parse(typeof(Villain.Types),row[2].ToString()),
+                        BaseName = string.IsNullOrEmpty(row[3].ToString()) ? null : row[3].ToString(),
+                        Description = row[4].ToString(),
+                        WikiLink = row[5].ToString(),
+                        PrintedDifficulty = int.Parse(row[6].ToString()),
+                        BoxSet = boxSetsFromDB.Where(x => x.Name == row[7].ToString()).First(),
+                        Image = "default"
+
+                    };
+
+
+                    villainFromGoogleSheet.Add(villain);
+
+                }
+            }
+
+            return villainFromGoogleSheet;
+        }
 
         public List<GameEnvironment> ReadEnvironment(string SpreadsheetId, List<BoxSet> boxSetsFromDB)
         {
             var environFromGoogleSheet = new List<GameEnvironment>();
-            var range = $"Environments!A:F";
-
-            //sets the Request we are going to use with Execute, with the Spreadsheet ID and the Range
-            SpreadsheetsResource.ValuesResource.GetRequest request =
-                service.Spreadsheets.Values.Get(SpreadsheetId, range);
-
-            //Captures the Sheet
-            var response = request.Execute();
-
-            //puts the values of each column(?)row? into a list of lists of objects
-            IList<IList<object>> values = response.Values;
+            IList<IList<object>> values = GetValues(SpreadsheetId, "Environments").Values;
 
             bool firstRow = true;
             if (values != null && values.Count > 0)

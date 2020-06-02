@@ -1,0 +1,83 @@
+﻿@model IEnumerable<website.Models.databaseModels.Hero>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Team)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WikiLink)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PrintedComplexity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsAlt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BaseHero)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BoxSet)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Image)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Team)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WikiLink)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PrintedComplexity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsAlt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BaseHero)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BoxSet.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Image)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -19,32 +19,21 @@ using website.Models.databaseModels;
 
 namespace website.Controllers
 {
-    public class BoxSetsController : Controller
+    public class VillainsController : Controller
     {
-
-        private GoogleRead boxSetReader = new GoogleRead();
+        private GoogleRead sheetReader = new GoogleRead();
         private readonly DatabaseContext _db;
         private readonly IWebHostEnvironment _env;
         private readonly IConfiguration _config;
 
 
         static readonly string SpreadsheetId = "185wr2Ws6D_8IAIsxIzxniN7tDwEm0IXsOZEm5lR9rMI";
-        //The link of the BoxSets Sheet
-
-
-
-        public BoxSetsController(DatabaseContext context, IWebHostEnvironment env, IConfiguration config)
+        public VillainsController(DatabaseContext context, IWebHostEnvironment env, IConfiguration config)
         {
             _db = context;
             _env = env;
             _config = config;
         }
-
-
-        /*Summary
-         * Retrieves a list of Box Sets from the GoogleSheet that contains them, then adds new and updates old
-         */
-
 
         public async Task<IActionResult> GoogleLoad()
         {
@@ -52,9 +41,11 @@ namespace website.Controllers
             var webRoot = _env.WebRootPath; // find the file on the server
             string directoryPath = Path.Combine(webRoot, "Data", "app_client_secret.json"); // This will need to be in official secrets not just an open json :p
 
-            boxSetReader.Init(directoryPath);
+            sheetReader.Init(directoryPath);
 
-            _db.AddOrUpdateRange<BoxSet>(boxSetReader.ReadBoxes(SpreadsheetId));
+            var existingBoxes = _db.BoxSet.ToList();
+
+            _db.AddOrUpdateRange<Villain>(sheetReader.ReadVillain(SpreadsheetId, existingBoxes));
 
 
             await _db.SaveChangesAsync();
@@ -62,23 +53,14 @@ namespace website.Controllers
             return RedirectToAction("Index");
         }
 
-
-
-
-
-
-
-
-
-
-        // GET: BoxSets
+        // GET: Villains
         public async Task<IActionResult> Index()
         {
-
-            return View(await _db.BoxSet.ToListAsync());
+            var databaseContext = _db.Villains.Include(v => v.BoxSet);
+            return View(await databaseContext.ToListAsync());
         }
 
-        // GET: BoxSets/Details/5
+        // GET: Villains/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -86,39 +68,42 @@ namespace website.Controllers
                 return NotFound();
             }
 
-            var boxSet = await _db.BoxSet
+            var villain = await _db.Villains
+                .Include(v => v.BoxSet)
                 .FirstOrDefaultAsync(m => m.ID == id);
-            if (boxSet == null)
+            if (villain == null)
             {
                 return NotFound();
             }
 
-            return View(boxSet);
+            return View(villain);
         }
 
-        // GET: BoxSets/Create
+        // GET: Villains/Create
         public IActionResult Create()
         {
+            ViewData["BoxSetId"] = new SelectList(_db.BoxSet, "ID", "Name");
             return View();
         }
 
-        // POST: BoxSets/Create
+        // POST: Villains/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Name,Description,PublicationDate,WikiLink,Image")] BoxSet boxSet)
+        public async Task<IActionResult> Create([Bind("ID,Name,Type,BaseName,Description,WikiLink,Image,PrintedDifficulty,BoxSetId")] Villain villain)
         {
             if (ModelState.IsValid)
             {
-                _db.Add(boxSet);
+                _db.Add(villain);
                 await _db.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(boxSet);
+            ViewData["BoxSetId"] = new SelectList(_db.BoxSet, "ID", "Name", villain.BoxSetId);
+            return View(villain);
         }
 
-        // GET: BoxSets/Edit/5
+        // GET: Villains/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -126,22 +111,23 @@ namespace website.Controllers
                 return NotFound();
             }
 
-            var boxSet = await _db.BoxSet.FindAsync(id);
-            if (boxSet == null)
+            var villain = await _db.Villains.FindAsync(id);
+            if (villain == null)
             {
                 return NotFound();
             }
-            return View(boxSet);
+            ViewData["BoxSetId"] = new SelectList(_db.BoxSet, "ID", "Name", villain.BoxSetId);
+            return View(villain);
         }
 
-        // POST: BoxSets/Edit/5
+        // POST: Villains/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Description,PublicationDate,WikiLink,Image")] BoxSet boxSet)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Type,BaseName,Description,WikiLink,Image,PrintedDifficulty,BoxSetId")] Villain villain)
         {
-            if (id != boxSet.ID)
+            if (id != villain.ID)
             {
                 return NotFound();
             }
@@ -150,12 +136,12 @@ namespace website.Controllers
             {
                 try
                 {
-                    _db.Update(boxSet);
+                    _db.Update(villain);
                     await _db.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!BoxSetExists(boxSet.ID))
+                    if (!VillainExists(villain.ID))
                     {
                         return NotFound();
                     }
@@ -166,10 +152,11 @@ namespace website.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(boxSet);
+            ViewData["BoxSetId"] = new SelectList(_db.BoxSet, "ID", "Name", villain.BoxSetId);
+            return View(villain);
         }
 
-        // GET: BoxSets/Delete/5
+        // GET: Villains/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -177,30 +164,31 @@ namespace website.Controllers
                 return NotFound();
             }
 
-            var boxSet = await _db.BoxSet
+            var villain = await _db.Villains
+                .Include(v => v.BoxSet)
                 .FirstOrDefaultAsync(m => m.ID == id);
-            if (boxSet == null)
+            if (villain == null)
             {
                 return NotFound();
             }
 
-            return View(boxSet);
+            return View(villain);
         }
 
-        // POST: BoxSets/Delete/5
+        // POST: Villains/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var boxSet = await _db.BoxSet.FindAsync(id);
-            _db.BoxSet.Remove(boxSet);
+            var villain = await _db.Villains.FindAsync(id);
+            _db.Villains.Remove(villain);
             await _db.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool BoxSetExists(int id)
+        private bool VillainExists(int id)
         {
-            return _db.BoxSet.Any(e => e.ID == id);
+            return _db.Villains.Any(e => e.ID == id);
         }
     }
 }

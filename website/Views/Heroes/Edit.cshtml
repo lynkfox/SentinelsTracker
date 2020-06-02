@@ -1,0 +1,74 @@
+﻿@model website.Models.databaseModels.Hero
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Hero</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ID" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Team" class="control-label"></label>
+                <input asp-for="Team" class="form-control" />
+                <span asp-validation-for="Team" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WikiLink" class="control-label"></label>
+                <input asp-for="WikiLink" class="form-control" />
+                <span asp-validation-for="WikiLink" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PrintedComplexity" class="control-label"></label>
+                <input asp-for="PrintedComplexity" class="form-control" />
+                <span asp-validation-for="PrintedComplexity" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsAlt" /> @Html.DisplayNameFor(model => model.IsAlt)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="BaseHero" class="control-label"></label>
+                <input asp-for="BaseHero" class="form-control" />
+                <span asp-validation-for="BaseHero" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BoxSetId" class="control-label"></label>
+                <select asp-for="BoxSetId" class="form-control" asp-items="ViewBag.BoxSetId"></select>
+                <span asp-validation-for="BoxSetId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Image" class="control-label"></label>
+                <input asp-for="Image" class="form-control" />
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
