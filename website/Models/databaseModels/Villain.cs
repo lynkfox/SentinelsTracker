@@ -8,8 +8,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace website.Models.databaseModels
 {
     [Table("VillainCharacters", Schema = "gamedata")]
-    public class Villain
+    public class Villain : IGameData
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ID { get; set; }
 
         [Required]
@@ -50,5 +52,11 @@ namespace website.Models.databaseModels
             Team,
             Scion
         }
+
+
+        //Interface options for Generic Methods
+        [NotMapped]
+        object IGameData.ID { get { return ID; } }
     }
 }
+

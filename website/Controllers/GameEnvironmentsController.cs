@@ -3,47 +3,36 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Google.Apis.Auth.OAuth2;
-using Google.Apis.Services;
-using Google.Apis.Sheets.v4;
-using Google.Apis.Sheets.v4.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using website.Controllers.BusinessLogic;
 using website.Controllers.BusinessLogic.GoogleAPI;
 using website.Models;
 using website.Models.databaseModels;
 
 namespace website.Controllers
 {
-    public class BoxSetsController : Controller
+    public class GameEnvironmentsController : Controller
     {
-
-        private GoogleRead boxSetReader = new GoogleRead();
+        private GoogleRead sheetReader = new GoogleRead();
         private readonly DatabaseContext _db;
         private readonly IWebHostEnvironment _env;
         private readonly IConfiguration _config;
 
 
         static readonly string SpreadsheetId = "185wr2Ws6D_8IAIsxIzxniN7tDwEm0IXsOZEm5lR9rMI";
-        //The link of the BoxSets Sheet
+        
 
 
 
-        public BoxSetsController(DatabaseContext context, IWebHostEnvironment env, IConfiguration config)
+        public GameEnvironmentsController(DatabaseContext context, IWebHostEnvironment env, IConfiguration config)
         {
             _db = context;
             _env = env;
             _config = config;
         }
-
-
-        /*Summary
-         * Retrieves a list of Box Sets from the GoogleSheet that contains them, then adds new and updates old
-         */
 
 
         public async Task<IActionResult> GoogleLoad()
@@ -52,9 +41,11 @@ namespace website.Controllers
             var webRoot = _env.WebRootPath; // find the file on the server
             string directoryPath = Path.Combine(webRoot, "Data", "app_client_secret.json"); // This will need to be in official secrets not just an open json :p
 
-            boxSetReader.Init(directoryPath);
+            sheetReader.Init(directoryPath);
 
-            _db.AddOrUpdateRange<BoxSet>(boxSetReader.ReadBoxes(SpreadsheetId));
+            var existingBoxes = _db.BoxSet.ToList();
+
+            _db.AddOrUpdateRange<GameEnvironment>(sheetReader.ReadEnvironment(SpreadsheetId, existingBoxes));
 
             _db.AddRange();
 
@@ -65,21 +56,13 @@ namespace website.Controllers
 
 
 
-
-
-
-
-
-
-
-        // GET: BoxSets
+        // GET: GameEnvironments
         public async Task<IActionResult> Index()
         {
-
-            return View(await _db.BoxSet.ToListAsync());
+            return View(await _db.GameEnvironments.ToListAsync());
         }
 
-        // GET: BoxSets/Details/5
+        // GET: GameEnvironments/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -87,39 +70,42 @@ namespace website.Controllers
                 return NotFound();
             }
 
-            var boxSet = await _db.BoxSet
+            var gameEnvironment = await _db.GameEnvironments
+                .Include(g => g.BoxSet)
                 .FirstOrDefaultAsync(m => m.ID == id);
-            if (boxSet == null)
+            if (gameEnvironment == null)
             {
                 return NotFound();
             }
 
-            return View(boxSet);
+            return View(gameEnvironment);
         }
 
-        // GET: BoxSets/Create
+        // GET: GameEnvironments/Create
         public IActionResult Create()
         {
+            ViewData["BoxSetId"] = new SelectList(_db.BoxSet, "ID", "Name");
             return View();
         }
 
-        // POST: BoxSets/Create
+        // POST: GameEnvironments/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Name,Description,PublicationDate,WikiLink,Image")] BoxSet boxSet)
+        public async Task<IActionResult> Create([Bind("ID,Name,Description,WikiLink,Image,BoxSetId")] GameEnvironment gameEnvironment)
         {
             if (ModelState.IsValid)
             {
-                _db.Add(boxSet);
+                _db.Add(gameEnvironment);
                 await _db.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(boxSet);
+            ViewData["BoxSetId"] = new SelectList(_db.BoxSet, "ID", "Name", gameEnvironment.BoxSetId);
+            return View(gameEnvironment);
         }
 
-        // GET: BoxSets/Edit/5
+        // GET: GameEnvironments/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -127,22 +113,23 @@ namespace website.Controllers
                 return NotFound();
             }
 
-            var boxSet = await _db.BoxSet.FindAsync(id);
-            if (boxSet == null)
+            var gameEnvironment = await _db.GameEnvironments.FindAsync(id);
+            if (gameEnvironment == null)
             {
                 return NotFound();
             }
-            return View(boxSet);
+            ViewData["BoxSetId"] = new SelectList(_db.BoxSet, "ID", "Name", gameEnvironment.BoxSetId);
+            return View(gameEnvironment);
         }
 
-        // POST: BoxSets/Edit/5
+        // POST: GameEnvironments/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Description,PublicationDate,WikiLink,Image")] BoxSet boxSet)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Description,WikiLink,Image,BoxSetId")] GameEnvironment gameEnvironment)
         {
-            if (id != boxSet.ID)
+            if (id != gameEnvironment.ID)
             {
                 return NotFound();
             }
@@ -151,12 +138,12 @@ namespace website.Controllers
             {
                 try
                 {
-                    _db.Update(boxSet);
+                    _db.Update(gameEnvironment);
                     await _db.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!BoxSetExists(boxSet.ID))
+                    if (!GameEnvironmentExists(gameEnvironment.ID))
                     {
                         return NotFound();
                     }
@@ -167,10 +154,11 @@ namespace website.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(boxSet);
+            ViewData["BoxSetId"] = new SelectList(_db.BoxSet, "ID", "Name", gameEnvironment.BoxSetId);
+            return View(gameEnvironment);
         }
 
-        // GET: BoxSets/Delete/5
+        // GET: GameEnvironments/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -178,30 +166,31 @@ namespace website.Controllers
                 return NotFound();
             }
 
-            var boxSet = await _db.BoxSet
+            var gameEnvironment = await _db.GameEnvironments
+                .Include(g => g.BoxSet)
                 .FirstOrDefaultAsync(m => m.ID == id);
-            if (boxSet == null)
+            if (gameEnvironment == null)
             {
                 return NotFound();
             }
 
-            return View(boxSet);
+            return View(gameEnvironment);
         }
 
-        // POST: BoxSets/Delete/5
+        // POST: GameEnvironments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var boxSet = await _db.BoxSet.FindAsync(id);
-            _db.BoxSet.Remove(boxSet);
+            var gameEnvironment = await _db.GameEnvironments.FindAsync(id);
+            _db.GameEnvironments.Remove(gameEnvironment);
             await _db.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool BoxSetExists(int id)
+        private bool GameEnvironmentExists(int id)
         {
-            return _db.BoxSet.Any(e => e.ID == id);
+            return _db.GameEnvironments.Any(e => e.ID == id);
         }
     }
 }

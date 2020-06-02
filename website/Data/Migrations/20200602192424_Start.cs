@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace website.Data.Migrations
 {
-    public partial class Init : Migration
+    public partial class Start : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -24,8 +24,7 @@ namespace website.Data.Migrations
                 schema: "gamedata",
                 columns: table => new
                 {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ID = table.Column<int>(nullable: false),
                     Name = table.Column<string>(maxLength: 250, nullable: false),
                     Description = table.Column<string>(maxLength: 500, nullable: true),
                     PublicationDate = table.Column<string>(maxLength: 25, nullable: true),
@@ -77,8 +76,7 @@ namespace website.Data.Migrations
                 schema: "gamedata",
                 columns: table => new
                 {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ID = table.Column<int>(nullable: false),
                     Name = table.Column<string>(maxLength: 250, nullable: false),
                     Description = table.Column<string>(maxLength: 500, nullable: true),
                     WikiLink = table.Column<string>(maxLength: 75, nullable: true),
@@ -101,8 +99,7 @@ namespace website.Data.Migrations
                 schema: "gamedata",
                 columns: table => new
                 {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ID = table.Column<int>(nullable: false),
                     Name = table.Column<string>(maxLength: 250, nullable: false),
                     Team = table.Column<string>(maxLength: 100, nullable: true),
                     Description = table.Column<string>(maxLength: 500, nullable: true),
@@ -129,8 +126,7 @@ namespace website.Data.Migrations
                 schema: "gamedata",
                 columns: table => new
                 {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ID = table.Column<int>(nullable: false),
                     Name = table.Column<string>(maxLength: 250, nullable: false),
                     Type = table.Column<string>(nullable: false),
                     BaseName = table.Column<string>(maxLength: 250, nullable: true),

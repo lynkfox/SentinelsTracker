@@ -53,7 +53,7 @@ namespace website.Controllers.BusinessLogic.GoogleAPI
         {
 
             var boxSetsFromGoogleSheets = new List<BoxSet>();
-            var range = $"{sheet}!A:E";
+            var range = $"{sheet}!A:F";
 
             //sets the Request we are going to use with Execute, with the Spreadsheet ID and the Range
             SpreadsheetsResource.ValuesResource.GetRequest request =
@@ -81,10 +81,11 @@ namespace website.Controllers.BusinessLogic.GoogleAPI
 
                     BoxSet newBox = new BoxSet()
                     {
-                        Name = row[0].ToString(),
-                        Description = row[1].ToString(),
-                        PublicationDate = row[2].ToString(),
-                        WikiLink = row[3].ToString(),
+                        ID = int.Parse(row[0].ToString()),
+                        Name = row[1].ToString(),
+                        Description = row[2].ToString(),
+                        PublicationDate = row[3].ToString(),
+                        WikiLink = row[4].ToString(),
                         Image = "default"
                     };
 
@@ -98,5 +99,55 @@ namespace website.Controllers.BusinessLogic.GoogleAPI
         }
 
 
+
+        public List<GameEnvironment> ReadEnvironment(string SpreadsheetId, List<BoxSet> boxSetsFromDB)
+        {
+            var environFromGoogleSheet = new List<GameEnvironment>();
+            var range = $"Environments!A:F";
+
+            //sets the Request we are going to use with Execute, with the Spreadsheet ID and the Range
+            SpreadsheetsResource.ValuesResource.GetRequest request =
+                service.Spreadsheets.Values.Get(SpreadsheetId, range);
+
+            //Captures the Sheet
+            var response = request.Execute();
+
+            //puts the values of each column(?)row? into a list of lists of objects
+            IList<IList<object>> values = response.Values;
+
+            bool firstRow = true;
+            if (values != null && values.Count > 0)
+            {
+                foreach (var row in values)
+                {
+                    if (firstRow)
+                    {
+                        //Skip Column Headers
+                        firstRow = false;
+                        continue;
+                    }
+
+
+
+                    GameEnvironment gameEnvironment = new GameEnvironment()
+                    {
+                        ID = int.Parse(row[0].ToString()),
+                        Name = row[1].ToString(),
+                        Description = row[2].ToString(),
+                        WikiLink = row[3].ToString(),
+                        BoxSet = boxSetsFromDB.Where(x => x.Name == row[4].ToString()).FirstOrDefault(),
+                        Image = "default"
+                    };
+
+                    environFromGoogleSheet.Add(gameEnvironment);
+
+
+                }
+            }
+
+            return environFromGoogleSheet;
+        }
     }
+
+    
 }

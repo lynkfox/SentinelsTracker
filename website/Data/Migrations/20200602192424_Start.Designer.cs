@@ -10,8 +10,8 @@ using website.Models;
 namespace website.Data.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20200602140133_Init")]
-    partial class Init
+    [Migration("20200602192424_Start")]
+    partial class Start
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -73,9 +73,7 @@ namespace website.Data.Migrations
             modelBuilder.Entity("website.Models.databaseModels.BoxSet", b =>
                 {
                     b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(500)")
@@ -222,9 +220,7 @@ namespace website.Data.Migrations
             modelBuilder.Entity("website.Models.databaseModels.GameEnvironment", b =>
                 {
                     b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<int>("BoxSetId")
                         .HasColumnType("int");
@@ -256,9 +252,7 @@ namespace website.Data.Migrations
             modelBuilder.Entity("website.Models.databaseModels.Hero", b =>
                 {
                     b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<string>("BaseHero")
                         .HasColumnType("nvarchar(250)")
@@ -448,9 +442,7 @@ namespace website.Data.Migrations
             modelBuilder.Entity("website.Models.databaseModels.Villain", b =>
                 {
                     b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<string>("BaseName")
                         .HasColumnType("nvarchar(250)")

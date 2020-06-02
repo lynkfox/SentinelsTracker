@@ -8,9 +8,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace website.Models.databaseModels
 {
     [Table("GameEnvironments", Schema = "gamedata")]
-    public class GameEnvironment
+    public class GameEnvironment : IGameData
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ID { get; set; }
 
         [Required]
@@ -28,11 +29,15 @@ namespace website.Models.databaseModels
         public int BoxSetId { get; set; }
         public BoxSet BoxSet { get; set; }
 
-        
+
         //Fkey - the one side of the one ot many.
         public ICollection<EnvironmentUsed> EnvironmentsUsed { get; set; }
-        
 
 
+        //Interface Options for Generic Methods
+        [NotMapped]
+        object IGameData.ID { get { return ID; } }
     }
+
 }
+

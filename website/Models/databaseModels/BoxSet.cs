@@ -8,9 +8,10 @@ using System.Threading.Tasks;
 namespace website.Models.databaseModels
 {
     [Table("BoxSets", Schema = "gamedata")]
-    public class BoxSet
+    public class BoxSet : IGameData
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ID { get; set; }
         [Required]
         [StringLength(250)]
@@ -29,5 +30,12 @@ namespace website.Models.databaseModels
         public ICollection<Hero> Heroes { get; set; }
         public ICollection<Villain> Villains { get; set; }
         public ICollection<GameEnvironment> GameEnvironments { get; set; }
+
+
+        //Interface options for Generic Methods
+        [NotMapped]
+        object IGameData.ID { get { return ID; } }
+
     }
 }
+

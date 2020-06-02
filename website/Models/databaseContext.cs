@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -94,7 +95,19 @@ namespace website.Models
                 .HasForeignKey<UserPermission>(y => y.UserId);
 
 
-            
+            //Key defines because of Interface issues.
+            modelBuilder.Entity<BoxSet>()
+                .HasKey(x => x.ID);
+
+            modelBuilder.Entity<GameEnvironment>()
+                .HasKey(x => x.ID);
+
+            modelBuilder.Entity<Hero>()
+                .HasKey(x => x.ID);
+
+            modelBuilder.Entity<Villain>()
+                .HasKey(x => x.ID);
+
         }
 
 
@@ -102,7 +115,42 @@ namespace website.Models
         //Fluid API to clean up some things
         public DbSet<website.Models.databaseModels.BoxSet> BoxSet { get; set; }
 
+
+
+        public int AddOrUpdate<T>(T entity)
+          where T : class, IGameData
+        {
+            return AddOrUpdateRange(new[] { entity });
+        }
+
+        public int AddOrUpdateRange<T>(IEnumerable<T> entities)
+            where T : class, IGameData
+        {
+            foreach (var entity in entities)
+            {
+                var id = entity.ID as object[];
+
+                // null resolution operator casts to object, so use ternary
+                var tracked = (id != null)
+                    ? Set<T>().Find(id)
+                    : Set<T>().Find(entity.ID);
+
+                if (tracked != null)
+                {
+                    // perform shallow copy
+                    Entry(tracked).CurrentValues.SetValues(entity);
+                }
+                else
+                {
+                    this.Add(entity);
+                }
+            }
+            return SaveChanges();
+        }
+
     }
 
+
+   
 
 }

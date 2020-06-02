@@ -5,9 +5,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace website.Models.databaseModels
 {
     [Table("HeroCharacters", Schema = "gamedata")]
-    public class Hero
+    public class Hero : IGameData
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ID { get; set; }
 
         [Required]
@@ -41,5 +42,11 @@ namespace website.Models.databaseModels
         //fkey the one side of a  one to many.
         public ICollection<HeroTeam> HeroTeams { get; set; }
 
+
+
+        //Interface options for Generic Methods
+
+        [NotMapped]
+        object IGameData.ID { get { return ID; } }
     }
 }
