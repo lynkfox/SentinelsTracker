@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using website.Controllers.BusinessLogic;
-using website.Controllers.BusinessLogic.GoogleAPI;
+using website.Controllers.BusinessLogic.GoogleReader;
 using website.Models;
 using website.Models.databaseModels;
 
@@ -53,8 +53,9 @@ namespace website.Controllers
             string directoryPath = Path.Combine(webRoot, "Data", "app_client_secret.json"); // This will need to be in official secrets not just an open json :p
 
             boxSetReader.Init(directoryPath);
-
             _db.AddOrUpdateRange<BoxSet>(boxSetReader.ReadBoxes(SpreadsheetId));
+
+            
 
 
             await _db.SaveChangesAsync();

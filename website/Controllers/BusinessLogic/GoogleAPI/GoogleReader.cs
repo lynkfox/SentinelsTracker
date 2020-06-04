@@ -3,6 +3,9 @@ using Google.Apis.Services;
 using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
@@ -14,7 +17,7 @@ using website.Models;
 using website.Models.databaseModels;
 using website.Models.databaseModels.HelperModels;
 
-namespace website.Controllers.BusinessLogic.GoogleAPI
+namespace website.Controllers.BusinessLogic.GoogleReader
 
 {
     public class GoogleRead
@@ -50,9 +53,9 @@ namespace website.Controllers.BusinessLogic.GoogleAPI
 
         }
 
-        private ValueRange GetValues(string SpreadsheetId, string sheetName)
+        public ValueRange GetValues(string SpreadsheetId, string sheetName)
         {
-            var range = $"{sheetName}!A:L";
+            var range = $"{sheetName}!A:AJ";
 
             //sets the Request we are going to use with Execute, with the Spreadsheet ID and the Range
             SpreadsheetsResource.ValuesResource.GetRequest request =
@@ -81,6 +84,40 @@ namespace website.Controllers.BusinessLogic.GoogleAPI
                     continue;
                 }
 
+                var user = new User()
+                {
+                    //if the last boxes in the row are all empty, Google doesn't add empty entries to the array
+                    //So if it exists, but is empty then Anonymous, otherwise Anonymous.
+                    Username = row.Count > 34 ?  string.IsNullOrEmpty(row[34].ToString()) ? "Anonymous" : row[34].ToString() : "Anonymous", 
+                    Profile = null,
+                    UserIcon = null,
+                    UserEmail = "None"
+
+                };
+
+                var details = new GameDetail()
+                {
+                   // HeroTeams = RetrieveHeroTeam(row.Skip(17).Take(10))
+                };
+
+
+
+                var villainsUsed = new VillainTeam();
+
+                var environments = new EnvironmentUsed();
+
+
+
+                var game = new Game()
+                {
+                    UserId = null,
+                    DateEntered = Convert.ToDateTime(row[0].ToString()),
+                    GameDetail = details
+                };
+
+                
+
+                
 
             }
 
@@ -88,7 +125,52 @@ namespace website.Controllers.BusinessLogic.GoogleAPI
 
             return inserts;
         }
+        public ICollection<HeroTeam> RetrieveHeroTeam(IEnumerable<object> row)
+        {
+            //Hero Team is a multi side of a relationship table, so we'll make a list for each one and get it ready. The Hero will need to be found in the db before insertion.
 
+            var heroTeam = new List<HeroTeam>();
+            bool heroField = true;
+            int position = 1;
+
+            var hero = new Hero();
+            
+
+            foreach(var entry in row)
+            {
+                
+                if(heroField)
+                {
+                    //Save the hero name
+                    hero.Name = entry.ToString().Equals("(none)") ? null : entry.ToString();
+                    
+                    //Set it so the next pass through the iEnumberable will set the position/incap data
+                    heroField = false;
+
+                }
+                else if (!string.IsNullOrEmpty(hero.Name)) // if the hero.Name has been set to null then there is no hero to add to the list.
+                {
+                    var teamMember = new HeroTeam()
+                    {
+                        Hero = hero,
+                        Position = position,
+                        Incapped = !string.IsNullOrEmpty(entry.ToString())
+                    };
+                    // Reset - increase position by 1, get a clean hero, and set heroField true so it will get the new hero
+                    position++;
+                    hero = new Hero();
+                    heroField = true;
+
+                    heroTeam.Add(teamMember);
+                }
+                
+                
+            }
+
+
+            return heroTeam;
+        }
+        
 
         //Game Data Reads. 
         public List<BoxSet> ReadBoxes(string SpreadsheetId)
@@ -249,6 +331,8 @@ namespace website.Controllers.BusinessLogic.GoogleAPI
 
             return environFromGoogleSheet;
         }
+
+        
     }
 
     

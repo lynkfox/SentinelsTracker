@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using website.Controllers.BusinessLogic.GoogleAPI;
+using website.Controllers.BusinessLogic.GoogleReader;
 using website.Models;
 using website.Models.databaseModels;
 

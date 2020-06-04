@@ -8,7 +8,7 @@ using website.Models;
 using website.Models.databaseModels;
 using website.Models.databaseModels.HelperModels;
 
-namespace website.Controllers.BusinessLogic.GoogleAPI
+namespace website.Controllers.BusinessLogic.GoogleReader
 {
     public class DatabaseLogic
     {
