@@ -12,6 +12,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using website.Models;
 using website.Models.databaseModels;
+using website.Models.databaseModels.HelperModels;
 
 namespace website.Controllers.BusinessLogic.GoogleAPI
 
@@ -63,6 +64,33 @@ namespace website.Controllers.BusinessLogic.GoogleAPI
         }
 
 
+        //Game Entry Record Read
+
+        public List<insertReady> ConvertFromGoogleToModel(string spreadsheetID)
+        {
+            var inserts = new List<insertReady>();
+
+
+            IList<IList<object>> values = GetValues(spreadsheetID, "TestEntry").Values;
+
+            foreach(var row in values)
+            {
+                if(row[0].ToString() == "Timestamp")
+                {
+                    //Title row. skip
+                    continue;
+                }
+
+
+            }
+
+
+
+            return inserts;
+        }
+
+
+        //Game Data Reads. 
         public List<BoxSet> ReadBoxes(string SpreadsheetId)
         {
 
@@ -143,7 +171,6 @@ namespace website.Controllers.BusinessLogic.GoogleAPI
 
             return heroFromGoogleSheet;
         }
-
 
         internal List<Villain> ReadVillain(string SpreadsheetId, List<BoxSet> boxSetsFromDB)
         {
