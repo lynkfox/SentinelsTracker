@@ -10,8 +10,8 @@ using website.Models;
 namespace website.Data.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20200602192424_Start")]
-    partial class Start
+    [Migration("20200604163427_Initialized")]
+    partial class Initialized
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -222,7 +222,7 @@ namespace website.Data.Migrations
                     b.Property<int>("ID")
                         .HasColumnType("int");
 
-                    b.Property<int>("BoxSetId")
+                    b.Property<int?>("BoxSetId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -258,7 +258,7 @@ namespace website.Data.Migrations
                         .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<int>("BoxSetId")
+                    b.Property<int?>("BoxSetId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -448,7 +448,7 @@ namespace website.Data.Migrations
                         .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<int>("BoxSetId")
+                    b.Property<int?>("BoxSetId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -568,8 +568,7 @@ namespace website.Data.Migrations
                     b.HasOne("website.Models.databaseModels.BoxSet", "BoxSet")
                         .WithMany("GameEnvironments")
                         .HasForeignKey("BoxSetId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
                 });
 
             modelBuilder.Entity("website.Models.databaseModels.Hero", b =>
@@ -577,8 +576,7 @@ namespace website.Data.Migrations
                     b.HasOne("website.Models.databaseModels.BoxSet", "BoxSet")
                         .WithMany("Heroes")
                         .HasForeignKey("BoxSetId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
                 });
 
             modelBuilder.Entity("website.Models.databaseModels.HeroTeam", b =>
@@ -634,8 +632,7 @@ namespace website.Data.Migrations
                     b.HasOne("website.Models.databaseModels.BoxSet", "BoxSet")
                         .WithMany("Villains")
                         .HasForeignKey("BoxSetId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
                 });
 
             modelBuilder.Entity("website.Models.databaseModels.VillainTeam", b =>

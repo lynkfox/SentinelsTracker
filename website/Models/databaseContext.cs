@@ -6,7 +6,9 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using website.Models.databaseModels;
 
 namespace website.Models
@@ -135,8 +137,11 @@ namespace website.Models
                     ? Set<T>().Find(id)
                     : Set<T>().Find(entity.ID);
 
+
+
                 if (tracked != null)
                 {
+
                     // perform shallow copy
                     Entry(tracked).CurrentValues.SetValues(entity);
                 }

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace website.Data.Migrations
 {
-    public partial class Start : Migration
+    public partial class Initialized : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -81,7 +81,7 @@ namespace website.Data.Migrations
                     Description = table.Column<string>(maxLength: 500, nullable: true),
                     WikiLink = table.Column<string>(maxLength: 75, nullable: true),
                     Image = table.Column<string>(maxLength: 75, nullable: true),
-                    BoxSetId = table.Column<int>(nullable: false)
+                    BoxSetId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -107,7 +107,7 @@ namespace website.Data.Migrations
                     PrintedComplexity = table.Column<int>(nullable: false),
                     IsAlt = table.Column<bool>(nullable: false),
                     BaseHero = table.Column<string>(maxLength: 250, nullable: true),
-                    BoxSetId = table.Column<int>(nullable: false),
+                    BoxSetId = table.Column<int>(nullable: true),
                     Image = table.Column<string>(maxLength: 75, nullable: true)
                 },
                 constraints: table =>
@@ -134,7 +134,7 @@ namespace website.Data.Migrations
                     WikiLink = table.Column<string>(maxLength: 75, nullable: true),
                     Image = table.Column<string>(maxLength: 75, nullable: true),
                     PrintedDifficulty = table.Column<int>(nullable: false),
-                    BoxSetId = table.Column<int>(nullable: false)
+                    BoxSetId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {

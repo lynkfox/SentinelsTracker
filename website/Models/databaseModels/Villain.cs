@@ -38,7 +38,7 @@ namespace website.Models.databaseModels
         public int PrintedDifficulty { get; set; }
 
         //Fkey to Box Set 1 to many
-        public int BoxSetId { get; set; }
+        public int? BoxSetId { get; set; }
         public BoxSet BoxSet { get; set; }
 
         //Fkey the one side of a one to many.

@@ -33,7 +33,7 @@ namespace website.Models.databaseModels
         public string BaseHero { get; set; }
 
         //Foreign Key for BoxSet 1 to Many (The many side)
-        public int BoxSetId { get; set; }
+        public int? BoxSetId { get; set; }
         public BoxSet BoxSet { get; set; }
 
         [StringLength(75)]

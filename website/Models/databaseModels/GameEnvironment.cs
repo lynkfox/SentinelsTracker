@@ -26,7 +26,7 @@ namespace website.Models.databaseModels
         public string Image { get; set; }
 
         //Fkey the many side of a 1 to many.
-        public int BoxSetId { get; set; }
+        public int? BoxSetId { get; set; }
         public BoxSet BoxSet { get; set; }
 
 
