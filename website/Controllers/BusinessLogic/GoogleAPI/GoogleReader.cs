@@ -53,6 +53,8 @@ namespace website.Controllers.BusinessLogic.GoogleReader
 
         }
 
+        
+
         public ValueRange GetValues(string SpreadsheetId, string sheetName)
         {
             var range = $"{sheetName}!A:AJ";
@@ -170,7 +172,29 @@ namespace website.Controllers.BusinessLogic.GoogleReader
 
             return heroTeam;
         }
-        
+
+
+        public ICollection<VillainTeam> RetrieveVillains(IEnumerable<object> row)
+        {
+            var villainTeam = new List<VillainTeam>();
+
+            var villain = new Villain()
+            {
+                Name = row.First().ToString()
+            };
+
+            var teamMember = new VillainTeam()
+            {
+                Villain = villain,
+                Position = 1,
+                Flipped = !string.IsNullOrEmpty(row.Last().ToString())
+            };
+
+            villainTeam.Add(teamMember);
+
+            return villainTeam;
+        }
+
 
         //Game Data Reads. 
         public List<BoxSet> ReadBoxes(string SpreadsheetId)
