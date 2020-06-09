@@ -46,10 +46,32 @@ namespace TrackerUnitTests
 
             var villain = reader.RetrieveVillains(row.Skip(1).Take(15));
 
-            Assert.AreEqual("Plague Rat", villain.First().Villain.Name);
+            Assert.AreEqual(46, villain.First().VillainId);
             Assert.AreEqual(1, villain.Count);
             Assert.IsTrue(villain.First().Flipped);
+            Assert.IsFalse(villain.First().VillainTeamGame);
 
+        }
+
+       [TestMethod]
+       public void TeamVillainReadIn()
+        {
+            GoogleRead reader = new GoogleRead();
+
+            string path = @"C:\Users\lynkf\Desktop\SentinelsTracker\website\wwwroot\Data\app_client_secret.json";
+            reader.Init(path);
+
+            IList<IList<object>> values = reader.GetValues(SpreadsheetId, "TestEntry").Values;
+
+            var row = values[5];
+
+            var villain = reader.RetrieveVillains(row.Skip(1).Take(15));
+
+            Assert.AreEqual(26, villain.First().VillainId); // 26 is Fright Train
+            Assert.AreEqual(4, villain.Count);
+            Assert.IsTrue(villain.First().Flipped);
+            Assert.AreEqual(8, villain.Last().VillainId); // 8 is Baron Blade: Vengeance Five
+            Assert.IsTrue(villain.First().VillainTeamGame);
         }
     }
 }

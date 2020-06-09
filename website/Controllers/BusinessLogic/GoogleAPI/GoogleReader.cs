@@ -29,6 +29,84 @@ namespace website.Controllers.BusinessLogic.GoogleReader
 
 
 
+        private Dictionary<string, int> VillainIDs = new Dictionary<string, int>()
+        {
+            {"Aeon Master", 1},
+            {"Akash'Bhuta",2},
+            {"Ambuscade",3},
+            {"Apostate",5},
+            {"Baron Blade",6},
+            {"Baron Blade, Mad Bomber",7},
+            {"Baron Blade: Vengeance Five",8},
+            {"Biomancer",9},
+            {"Borr the Unstable",10},
+            {"Bugbear",11},
+            {"La Capitan",12},
+            {"Chairman, The",14},
+            {"Chokepoint",15},
+            {"Citizen Dawn",16},
+            {"Citizens Hammer and Anvil",17},
+            {"Dark Mind",18},
+            {"Deadline",19},
+            {"Dreamer, The",20},
+            {"Empyreon",21},
+            {"Ennead, The",22},
+            {"Ermine",23},
+            {"Faultless",24},
+            {"Friction",25},
+            {"Fright Train",26},
+            {"Gloomweaver",27},
+            {"Gloomweaver, Skinwalker",28},
+            {"Grand Warlord Voss",29},
+            {"Ranek Kel'Voss",30},
+            {"Grezer Clutch",31},
+            {"Infinitor",32},
+            {"Infinitor: Tormented Ally",33},
+            {"Iron Legacy",34},
+            {"Kaargra Warfang",35},
+            {"Kismet",36},
+            {"Kismet, Trickster",37},
+            {"Matriarch, The",38},
+            {"Miss Information",39},
+            {"Nixious The Chosen",41},
+            {"OblivAeon",42},
+            {"Omnitron",43},
+            {"Omnitron, Cosmic",44},
+            {"Operative, The",45},
+            {"Plague Rat",46},
+            {"Progeny",48},
+            {"Proletariat",50},
+            {"Sanction",51},
+            {"Sergeant Steel",52},
+            {"Spite",53},
+            {"Spite: Agent of Gloom",54},
+            {"Void Soul",55},
+            {"Wager Master",56},
+            {"Anathema",57},
+            {"Anathema, Evolved",58},
+            {"Dendron",59},
+            {"Dendron, Windcolor",60},
+            {"Gray",61},
+            {"Ram, The",62},
+            {"Ram, The: 1929",63},
+            {"Tiamat",64},
+            {"Tiamat, Hydra",65},
+            {"Oriphel",66},
+            {"Swarm Eater",67},
+            {"Swarm Eater, Hivemind",68},
+            {"Vector",69},
+            {"Phase",70},
+            {"Celadroch",71},
+            {"Menagerie",72},
+            {"Dynamo",73},
+            {"Infernal Choir, The",74},
+            {"Mistress of Fate, The",75},
+            {"Mythos",76},
+            {"Outlander",77},
+            {"Screamachine",78}
+        };
+
+
         //Set Up the Connection to the google API
         public void Init(string directoryPath)
         {
@@ -178,22 +256,134 @@ namespace website.Controllers.BusinessLogic.GoogleReader
         {
             var villainTeam = new List<VillainTeam>();
 
-            var villain = new Villain()
-            {
-                Name = row.First().ToString()
-            };
+            bool team = false;
 
-            var teamMember = new VillainTeam()
+            if(row.First().ToString() == "Vengeance Five")
             {
-                Villain = villain,
-                Position = 1,
-                Flipped = !string.IsNullOrEmpty(row.Last().ToString())
-            };
+                //Setup
+                team = true;
+                int position = 1;
 
-            villainTeam.Add(teamMember);
+                //10 columns of possible villains, add them in sections of 2 to divide them up with their possible incaps.
+                List<IEnumerable<object>> teamVillains = ExtractIndividualTeam(row);
+
+                foreach (var member in teamVillains)
+                {
+                    if (string.IsNullOrEmpty(member.First().ToString()))
+                    { // if there is no entry in the first then there was no villain so we can break early.
+                        break;
+                    }
+
+                    string villainName = RemoveExtraVengeanceTag(member.First().ToString());
+
+                    int villainCorrectedID = VillainIDCorrection(villainName);
+
+                    var teamMember = new VillainTeam()
+                    {
+                        VillainId = villainCorrectedID,
+                        Position = position,
+                        Flipped = !string.IsNullOrEmpty(member.Last().ToString()),
+                        VillainTeamGame = team
+                    };
+
+                    villainTeam.Add(teamMember);
+
+                    position++;
+                }
+
+            }
+            else // Solo Villain (not Team) 
+            {
+
+                var teamMember = new VillainTeam()
+                {
+                    VillainId = VillainIDs[row.First().ToString()],
+                    Position = 1,
+                    Flipped = !string.IsNullOrEmpty(row.Last().ToString()),
+                    VillainTeamGame = team
+                };
+
+                villainTeam.Add(teamMember);
+
+            }
 
             return villainTeam;
         }
+
+        private List<IEnumerable<object>> ExtractIndividualTeam(IEnumerable<object> row)
+        {
+            List<IEnumerable<object>> teamMembers = new List<IEnumerable<object>>();
+
+            for (int i = 1; i < 10; i += 2)
+            {
+                teamMembers.Add(row.Skip(i).Take(2));
+            }
+
+            return teamMembers;
+        }
+
+
+        /* Edge Cases
+         * 
+         * 
+         * There are some edge cases and unique situations that need to be adjusted for from how the
+         *Team Villains are displayed in the Google Docs and how they are in the Database (cleaner in the db)
+         *
+         * Team Villains have " (Vengeance)" that needs to be removed
+         * 
+         * The Database allows duplicate names (bit cleaner for other aspects) and so the proper ID's for the Team Version need to be recovered
+         */
+        private string RemoveExtraVengeanceTag(string villainName)
+        {
+            return villainName.Replace(" (Vengeance)", "");
+        }
+
+        private int VillainIDCorrection(string villainName)
+        {
+            /* Edge cases (duplicate names in database)
+             * 
+             * Ambuscade (team)
+             * La Capitan (Team)
+             * Baron Blade: Vengeance Five (team)
+             * Miss Information (team)
+             * Plague Rat (team)
+             * Progeny (Scion)
+             * 
+             * since the names have been added with specified ID's we can (and are) assuming the team version of the same villain is +1
+             * 
+             * (excepting Baron Blade because he has 2 additionals, but they have different names)
+             */
+
+            if(villainName == "Ambuscade" ||
+                villainName == "La Capitan" || 
+                villainName == "Miss Information" ||
+                villainName == "Plague Rat" ||
+                villainName == "Progeny")
+            {
+                return VillainIDs[villainName] + 1;
+            }
+
+            else if(villainName == "Baron Blade")
+            {
+                return VillainIDs["Baron Blade: Vengeance Five"];
+            }
+            else
+            {
+                return VillainIDs[villainName];
+            }
+
+        }
+
+
+        
+
+        /* These functions read in the game data from the primer doc.
+         * 
+         * They were partially created to get a sense on how to use the Google Sheet API,
+         * but also for use when first deploying. After the database is up and running and primed, these should be removed in
+         * future live environments
+         * 
+         */
 
 
         //Game Data Reads. 
