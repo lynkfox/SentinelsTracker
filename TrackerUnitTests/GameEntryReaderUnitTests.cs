@@ -25,7 +25,7 @@ namespace TrackerUnitTests
 
             var row = values[2];
 
-            var heroTeam = reader.RetrieveHeroTeam(row.Skip(17).Take(10));
+            var heroTeam = reader.RetrieveHeroTeam(reader.ExtractHeroTeam(row.Skip(17).Take(10)));
 
             Assert.AreEqual(45, heroTeam.First().HeroId);
             Assert.IsTrue(heroTeam.First().Incapped);
@@ -44,7 +44,7 @@ namespace TrackerUnitTests
 
             var row = values[2];
 
-            var villain = reader.RetrieveVillains(row.Skip(1).Take(15));
+            var villain = reader.RetrieveVillains(reader.ExtractVillainTeam(row.Skip(1).Take(15)));
 
             Assert.AreEqual(46, villain.First().VillainId);
             Assert.AreEqual(1, villain.Count);
@@ -65,7 +65,7 @@ namespace TrackerUnitTests
 
             var row = values[5];
 
-            var villain = reader.RetrieveVillains(row.Skip(1).Take(15));
+            var villain = reader.RetrieveVillains(reader.ExtractVillainTeam(row.Skip(1).Take(15)));
 
             Assert.AreEqual(26, villain.First().VillainId); // 26 is Fright Train
             Assert.AreEqual(4, villain.Count);

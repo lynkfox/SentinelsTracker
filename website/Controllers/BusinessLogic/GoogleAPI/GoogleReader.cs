@@ -293,6 +293,48 @@ namespace website.Controllers.BusinessLogic.GoogleReader
             {"Screamachine",78}
         };
 
+        private Dictionary<string, int> EnvironmentIds = new Dictionary<string, int>()
+        {
+            { "Block, The" , 2 },
+            { "Celestial Tribunal, The" , 2 },
+            { "Champion Studios" , 3 },
+            { "Court Of Blood, The" , 4 },
+            { "Dok'Thorath Capital" , 5 },
+            { "Enclave of the Endlings" , 6 },
+            { "The Final Wasteland" , 7 },
+            { "Fort Adamant" , 8 },
+            { "Freedom Tower" , 9 },
+            { "Insula Primalis" , 10 },
+            { "Madame Mittermeier's Fantastical Festival of Conundrums & Curiosities" , 11 },
+            { "Magmeria" , 12 },
+            { "Maerynian Refuge" , 13 },
+            { "Mobile Defense Platform" , 14 },
+            { "Mordengrad" , 15 },
+            { "Nexus of the Void" , 16 },
+            { "Omintron IV" , 17 },
+            { "Pike Industrial Complex" , 18 },
+            { "Realm of Discord" , 19 },
+            { "Ruins of Atlantis" , 20 },
+            { "Silver Gulch 1883" , 21 },
+            { "Temple of Zhu Long" , 22 },
+            { "Time Cataclysm" , 23 },
+            { "Tomb of Anubis" , 24 },
+            { "Wagner Mars " , 25 },
+            { "Blackwood Forest" , 26 },
+            { "F.S.C. Continuance Wanderer" , 27 },
+            { "Halberd Experimental Research Center" , 28 },
+            { "Northspar" , 29 },
+            { "St. Simeon's Catacombs" , 30 },
+            { "Wandering Isle" , 31 },
+            { "Cybersphere" , 32 },
+            { "Superstorm Akela" , 33 },
+            { "Catchwater Harbor 1929" , 34 },
+            { "Chasm of a Thousand Nights" , 35 },
+            { "Nightlore Citadel" , 36 },
+            { "Vault 5" , 37 },
+            { "Windmill City" , 38 }
+        };
+
 
         //Set Up the Connection to the google API
         public void Init(string directoryPath)
@@ -373,14 +415,13 @@ namespace website.Controllers.BusinessLogic.GoogleReader
 
                 var details = new GameDetail()
                 {
-                   // HeroTeams = RetrieveHeroTeam(row.Skip(17).Take(10))
+                   HeroTeams = RetrieveHeroTeam(ExtractHeroTeam(row.Skip(17).Take(10))),
+                   VillainTeams = RetrieveVillains(ExtractVillainTeam(row.Skip(1).Take(15)))
                 };
 
 
 
-                var villainsUsed = new VillainTeam();
-
-                var environments = new EnvironmentUsed();
+                
 
 
 
@@ -406,15 +447,13 @@ namespace website.Controllers.BusinessLogic.GoogleReader
 
 
 
-        public ICollection<HeroTeam> RetrieveHeroTeam(IEnumerable<object> row)
+        public ICollection<HeroTeam> RetrieveHeroTeam(List<(string name, bool flip)> teamMembers)
         {
             //Hero Team is a multi side of a relationship table, so we'll make a list for each one and get it ready. The Hero will need to be found in the db before insertion.
 
             var heroTeam = new List<HeroTeam>();
             int position = 1;
 
-
-            List<(string name, bool flip)> teamMembers = ExtractHeroTeam(row);
 
             foreach(var member in teamMembers)
             {
@@ -438,80 +477,79 @@ namespace website.Controllers.BusinessLogic.GoogleReader
         }
 
 
-        public ICollection<VillainTeam> RetrieveVillains(IEnumerable<object> row)
+        public ICollection<VillainTeam> RetrieveVillains(List<(string name, bool flip)> teamVillains)
         {
             var villainTeam = new List<VillainTeam>();
 
-            bool team = false;
+            
+            int position = 1;
 
-            if(row.First().ToString() == "Vengeance Five")
+         
+            //if more than one in Team Villains list then team is true.
+            bool team = teamVillains.Count > 1;
+
+            foreach (var member in teamVillains)
             {
-                //Setup
-                team = true;
-                int position = 1;
-
-                //10 columns of possible villains, add them in sections of 2 to divide them up with their possible incaps.
-                List<(string name, bool flip)> teamVillains = ExtractVillainTeam(row);
-
-                foreach (var member in teamVillains)
+                if (string.IsNullOrEmpty(member.name))
+                { // if there is no entry in the first then there was no villain so we can break early.
+                    break;
+                } else if (member.name == "Vengeance Five")
                 {
-                    if (string.IsNullOrEmpty(member.name))
-                    { // if there is no entry in the first then there was no villain so we can break early.
-                        break;
-                    }
-
-                    string villainName = RemoveExtraVengeanceTag(member.name);
-
-                    int villainCorrectedID = VillainIDCorrection(villainName);
-
-                    var teamMember = new VillainTeam()
-                    {
-                        VillainId = villainCorrectedID,
-                        Position = position,
-                        Flipped = member.flip,
-                        VillainTeamGame = team
-                    };
-
-                    villainTeam.Add(teamMember);
-
-                    position++;
+                    
+                    continue;
                 }
 
-            }
-            else // Solo Villain (not Team) 
-            {
+                string villainName = RemoveExtraVengeanceTag(member.name);
 
+                int villainCorrectedID = team ? VillainIDCorrection(villainName) : VillainIDs[member.name];
+                
                 var teamMember = new VillainTeam()
                 {
-                    VillainId = VillainIDs[row.First().ToString()],
-                    Position = 1,
-                    Flipped = !string.IsNullOrEmpty(row.Last().ToString()),
+                    VillainId = villainCorrectedID,
+                    Position = position,
+                    Flipped = member.flip,
                     VillainTeamGame = team
                 };
 
                 villainTeam.Add(teamMember);
 
+                position++;
             }
+
+            
+            
 
             return villainTeam;
         }
 
-        private List<(string name, bool flip)> ExtractVillainTeam(IEnumerable<object> row)
+        public List<(string name, bool flip)> ExtractVillainTeam(IEnumerable<object> row)
         {
             var teamMembers = new List<(string name, bool flip)>();
             var columns = row.ToList();
 
-            for (int i = 1; i < 10; i += 2)
-            {
-                var memberStatus = ( name: columns[i].ToString(), flip: !string.IsNullOrEmpty(columns[i+1].ToString()));
+            //add the Solo Villain or Vengeance Team qualifier
 
-                teamMembers.Add(memberStatus);
+            var solo = (name: columns[0].ToString(), flip: !string.IsNullOrEmpty(columns[14].ToString()));
+            teamMembers.Add(solo);
+
+            //add the team memberes if there are any
+
+            if(!string.IsNullOrEmpty(columns[1].ToString()))
+            {
+                for (int i = 1; i < 10; i += 2)
+                {
+                    var memberStatus = (name: columns[i].ToString(), flip: !string.IsNullOrEmpty(columns[i + 1].ToString()));
+
+                    teamMembers.Add(memberStatus);
+                }
+
             }
+            
 
             return teamMembers;
         }
 
-        private List<(string name, bool flip)> ExtractHeroTeam(IEnumerable<object> row)
+        public List<(string name, bool flip)> ExtractHeroTeam(IEnumerable<object> row)
         {
             var teamMembers = new List<(string name, bool flip)>();
             var columns = row.ToList();
