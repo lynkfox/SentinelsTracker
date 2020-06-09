@@ -410,40 +410,26 @@ namespace website.Controllers.BusinessLogic.GoogleReader
             //Hero Team is a multi side of a relationship table, so we'll make a list for each one and get it ready. The Hero will need to be found in the db before insertion.
 
             var heroTeam = new List<HeroTeam>();
-            bool heroField = true;
             int position = 1;
 
-            string heroName = null;
-            
 
-            foreach(var entry in row)
+            List<IEnumerable<object>> teamMembers = ExtractHeroTeam(row);
+
+            foreach(var member in teamMembers)
             {
-                
-                if(heroField)
-                {
-                    //Save the hero name
-                    heroName = entry.ToString().Equals("(none)") ? null : entry.ToString();
-                    
-                    //Set it so the next pass through the iEnumberable will set the position/incap data
-                    heroField = false;
-
+                if(member.First().ToString() == "(none)")
+                { // (none) indicates no one in that position, and as they are supposed to be in order... (might need todouble check that)
+                    break;
                 }
-                else if (!string.IsNullOrEmpty(heroName)) // if the hero.Name has been set to null then there is no hero to add to the list.
+                var teamMember = new HeroTeam()
                 {
-                    var teamMember = new HeroTeam()
-                    {
-                        HeroId = HeroIDs[heroName],
-                        Position = position,
-                        Incapped = !string.IsNullOrEmpty(entry.ToString())
-                    };
-                    // Reset - increase position by 1, get a clean hero, and set heroField true so it will get the new hero
-                    position++;
-                    heroField = true;
-
-                    heroTeam.Add(teamMember);
-                }
-                
-                
+                    HeroId = HeroIDs[member.First().ToString()],
+                    Position = position,
+                    Incapped = !string.IsNullOrEmpty(member.Last().ToString())
+                };
+                // Reset - increase position by 1, get a clean hero, and set heroField true so it will get the new hero
+                position++;
+                heroTeam.Add(teamMember);
             }
 
 
@@ -464,7 +450,7 @@ namespace website.Controllers.BusinessLogic.GoogleReader
                 int position = 1;
 
                 //10 columns of possible villains, add them in sections of 2 to divide them up with their possible incaps.
-                List<IEnumerable<object>> teamVillains = ExtractIndividualTeam(row);
+                List<IEnumerable<object>> teamVillains = ExtractVillainTeam(row);
 
                 foreach (var member in teamVillains)
                 {
@@ -509,11 +495,23 @@ namespace website.Controllers.BusinessLogic.GoogleReader
             return villainTeam;
         }
 
-        private List<IEnumerable<object>> ExtractIndividualTeam(IEnumerable<object> row)
+        private List<IEnumerable<object>> ExtractVillainTeam(IEnumerable<object> row)
         {
             List<IEnumerable<object>> teamMembers = new List<IEnumerable<object>>();
 
             for (int i = 1; i < 10; i += 2)
+            {
+                teamMembers.Add(row.Skip(i).Take(2));
+            }
+
+            return teamMembers;
+        }
+
+        private List<IEnumerable<object>> ExtractHeroTeam(IEnumerable<object> row)
+        {
+            List<IEnumerable<object>> teamMembers = new List<IEnumerable<object>>();
+
+            for (int i = 0; i < 10; i += 2)
             {
                 teamMembers.Add(row.Skip(i).Take(2));
             }
