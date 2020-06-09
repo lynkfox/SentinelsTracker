@@ -27,7 +27,7 @@ namespace TrackerUnitTests
 
             var heroTeam = reader.RetrieveHeroTeam(row.Skip(17).Take(10));
 
-            Assert.AreEqual("K.N.Y.F.E.", heroTeam.First().Hero.Name);
+            Assert.AreEqual(45, heroTeam.First().HeroId);
             Assert.IsTrue(heroTeam.First().Incapped);
             Assert.AreEqual(4, heroTeam.Count);
         }

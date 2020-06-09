@@ -27,6 +27,192 @@ namespace website.Controllers.BusinessLogic.GoogleReader
         readonly string sheet = "BoxSets";
         private SheetsService service;
 
+        /* Hardcoded ids! The HORROR!
+         * 
+         * In this case we have 2 reasons for this
+         * 
+         * 1)  We are forcing ID's on entry for the Heroes/Environments/Boxes/Villains when priming the database. This is to keep things in a certain order in
+         * in regards to the Cauldron and OrderBy(ID) gives us the order we want no matter which we use (name may not always, especially with some alternates)
+         * 
+         * 2) Hardcoded here, even though it opens a possiblity for bugs in a problematic ID, is far faster. This dictionary loaded into memory won't need to access
+         * Entity Framework in order to get the ID and we can move through the thousands of entries much faster (hopefully)
+         */
+
+        private Dictionary<string, int> HeroIDs = new Dictionary<string, int>()
+        {
+            { "Absolute Zero" , 1 },
+            { "Absolute Zero: Termi-Nation" , 2 },
+            { "Absolute Zero: Freedom Five" , 3 },
+            { "Absolute Zero: Freedom Six (Elemental Wrath)" , 4 },
+            { "Akash'Thriya" , 5 },
+            { "Akash'Thriya: Spirit of the Void" , 6 },
+            { "Argent Adept, The" , 7 },
+            { "Argent Adept, The: Prime Wardens" , 8 },
+            { "Argent Adep, The: Dark Conductor" , 9 },
+            { "Argent Adept, The: XTREME Prime Wardens" , 10 },
+            { "Benchmark" , 11 },
+            { "Benchmark: Supply and Demand" , 12 },
+            { "Bunker" , 13 },
+            { "Bunker: GI Bunker" , 14 },
+            { "Bunker: Termi-Nation" , 15 },
+            { "Bunker: Freedom Five" , 16 },
+            { "Bunker: Freedom Six (Engine of War)" , 17 },
+            { "Captain Cosmic" , 18 },
+            { "Captain Cosmic: Prime Wardens" , 19 },
+            { "Captain Cosmic: Requital" , 20 },
+            { "Captain Cosmic: XTREME Prime Wardens" , 21 },
+            { "Chrono-Ranger" , 22 },
+            { "Chrono-Ranger: The Best of Times" , 23 },
+            { "Comodora, La" , 24 },
+            { "Comodora, La: Curse of the Black Spot" , 25 },
+            { "Dr. Medico: Void Guard" , 26 },
+            { "Dr. Medico: Malpractice" , 27 },
+            { "Expatriette" , 28 },
+            { "Expatriette: Dark Watch" , 29 },
+            { "Fanatic" , 30 },
+            { "Fanatic: Redeemer" , 31 },
+            { "Fanatic: Prime Wardens" , 32 },
+            { "Fanatic: XTREME Prime Wardens" , 33 },
+            { "Guise" , 34 },
+            { "Guise, Santa" , 35 },
+            { "Guise, Completionist" , 36 },
+            { "Haka" , 37 },
+            { "Haka: Prime Wardens" , 38 },
+            { "Haka: XTREME Prime Wardens" , 39 },
+            { "Haka: The Eternal" , 40 },
+            { "Harpy, The" , 41 },
+            { "Harpy, The: Dark Watch" , 42 },
+            { "Idealist: Void Guard" , 43 },
+            { "Idealist: Super Sentai" , 44 },
+            { "K.N.Y.F.E." , 45 },
+            { "K.N.Y.F.E.: Rogue Agent" , 46 },
+            { "Legacy" , 47 },
+            { "Legacy: America's Newest (Beacon)" , 48 },
+            { "Legacy: America's Greatest" , 49 },
+            { "Legacy: Freedom Five" , 50 },
+            { "Legacy: America's Cleverist" , 51 },
+            { "Lifeline" , 52 },
+            { "Lifeline: Bloodmage" , 53 },
+            { "Luminary" , 54 },
+            { "Luminary: Ivana Ramonat" , 55 },
+            { "Mainstay: Void Guard" , 56 },
+            { "Mainstay: Road Warrior" , 57 },
+            { "Mr. Fixer" , 58 },
+            { "Mr. Fixer: Dark Watch" , 59 },
+            { "Naturalist, The" , 60 },
+            { "Naturalst, The Hunted" , 61 },
+            { "Nightmist" , 62 },
+            { "Nightmist: Dark Watch" , 63 },
+            { "Omnitron-X" , 64 },
+            { "Omnitron-U" , 65 },
+            { "Parse" , 66 },
+            { "Parse: Fugue State" , 67 },
+            { "Ra" , 68 },
+            { "Ra: Horus of the Two Horizons" , 69 },
+            { "Ra: The Setting Sun" , 70 },
+            { "Scholar, The" , 71 },
+            { "Scholar of the Infinite, The" , 72 },
+            { "Sentinels, The" , 73 },
+            { "Sentinels, The Adamant" , 74 },
+            { "Setback" , 75 },
+            { "Setback: Darkwatch" , 76 },
+            { "Sky-Scraper" , 77 },
+            { "Sky-Scraper: Extremist" , 78 },
+            { "Stuntman" , 79 },
+            { "Stuntman: Action Hero" , 80 },
+            { "Tachyon" , 81 },
+            { "Tachyon: Super Scientific" , 82 },
+            { "Tachyon: Freedom Five" , 83 },
+            { "Tachyon: Freedom Six (Team Leader)" , 84 },
+            { "Tempest" , 85 },
+            { "Tempest: Prime Wardens" , 86 },
+            { "Tempest: Freedom Six (Sacrifice)" , 87 },
+            { "Tempest: XTREME Prime Wardens" , 88 },
+            { "Unity" , 89 },
+            { "Unity: Termi-Nation" , 90 },
+            { "Unity: Freedom Six (Golem)" , 91 },
+            { "Visionary, The" , 92 },
+            { "Visionary, Dark" , 93 },
+            { "Visionary, The: Unleashed" , 94 },
+            { "Wraith, The" , 95 },
+            { "Wraith, The Rook City" , 96 },
+            { "Wraith, The: Freedom Five" , 97 },
+            { "Wraith, The: Freedom Six (Price of Freedom)" , 98 },
+            { "Writhe: Void Guard" , 99 },
+            { "Writhe: Cosmic Inventor" , 100 },
+            { "Baccarat" , 101 },
+            { "Baccarat: Ace of Swords" , 102 },
+            { "Baccarat: Ace of Sorrows" , 103 },
+            { "Baccarat: 1929" , 104 },
+            { "Doc Havoc" , 105 },
+            { "Doc Havoc: First Response" , 106 },
+            { "Doc Havoc: 2199" , 107 },
+            { "Knight, The" , 108 },
+            { "Knight, The Fair" , 109 },
+            { "Knight, The Berserker" , 110 },
+            { "Knight, The: 1929" , 111 },
+            { "Knight, The: Wasteland Ronin" , 112 },
+            { "Lady of the Wood" , 113 },
+            { "Lady of the Wood: Season of Change" , 114 },
+            { "Lady of the Wood: Ministry of Strategic Science" , 115 },
+            { "Lady of the Wood: 2199" , 116 },
+            { "Malichae" , 117 },
+            { "Malichae: Shardmaster" , 118 },
+            { "Malichae: Ministry of Strategic Science" , 119 },
+            { "Necro" , 120 },
+            { "Necro: Warden of Chaos" , 121 },
+            { "Necro: 1929" , 122 },
+            { "Quicksilver" , 123 },
+            { "Quicksilver, The Uncanny" , 124 },
+            { "Quicksilver: Renegade" , 125 },
+            { "Starlight" , 126 },
+            { "Starlight: Genesis" , 127 },
+            { "Starlight: Nightlore Council" , 128 },
+            { "Stranger, The" , 129 },
+            { "Stranger, The Rune-Carved" , 130 },
+            { "Stranger, The: 1929" , 131 },
+            { "Stranger, The: Wasteland Ronin" , 132 },
+            { "Tango One" , 133 },
+            { "Tango One: Ghost Ops" , 134 },
+            { "Tango One: 1929" , 135 },
+            { "Vanish" , 136 },
+            { "Vanish: First Response" , 137 },
+            { "Vanish: 1929" , 138 },
+            { "Cricket" , 139 },
+            { "Cricket: First Response" , 140 },
+            { "Cricket: Renegade" , 141 },
+            { "Cricket: Wasteland Ronin" , 142 },
+            { "Cypher" , 143 },
+            { "Cypher: First Response" , 144 },
+            { "Cypher: Swarming Protocol" , 145 },
+            { "Titan" , 146 },
+            { "Titan: Ministry of Strategic Science" , 147 },
+            { "Titan: 2199" , 148 },
+            { "Echelon" , 149 },
+            { "Echelon: First Response" , 150 },
+            { "Echelon: 2199" , 151 },
+            { "Impact" , 152 },
+            { "Impact: Renegade" , 153 },
+            { "Impact: Wasteland Ronin" , 154 },
+            { "Magnificent Mara" , 155 },
+            { "Magnificent Mara: 1929" , 156 },
+            { "Magnificent Mara: Ministry of Strategic Science" , 157 },
+            { "Drift" , 158 },
+            { "Drift: Through the Breach" , 159 },
+            { "Drift: 1929/2199" , 160 },
+            { "Gargoyle" , 161 },
+            { "Gargoyle: 2199" , 162 },
+            { "Gargoyle: Wasteland Ronin" , 163 },
+            { "Gyrosaur" , 164 },
+            { "Gyrosaur: Speed Demon" , 165 },
+            { "Gyrosaur: Renegade" , 166 },
+            { "Pyre" , 167 },
+            { "Pyre, The Unstable" , 168 },
+            { "Pyre: Wasteland Ronin" , 169 },
+            { "Terminus" , 170 },
+            { "Terminus: 2199" , 171 },
+            { "Terminus: Ministry of Strategic Science" , 172 }
+        };
 
 
         private Dictionary<string, int> VillainIDs = new Dictionary<string, int>()
@@ -147,7 +333,15 @@ namespace website.Controllers.BusinessLogic.GoogleReader
         }
 
 
-        //Game Entry Record Read
+        /* Game Entry Record Read
+         * 
+         * This is the main method to read a row in the google sheet and prepare it for database entry. With almost 35k entries we have to figure out the most 
+         * effecient way to do this
+         * 
+         * not currently loving a Foreach over every single row but ... I don't think there is another way :/
+         * 
+         * Might only read in a thousand at a time?
+         */
 
         public List<insertReady> ConvertFromGoogleToModel(string spreadsheetID)
         {
@@ -167,11 +361,12 @@ namespace website.Controllers.BusinessLogic.GoogleReader
                 var user = new User()
                 {
                     //if the last boxes in the row are all empty, Google doesn't add empty entries to the array
-                    //So if it exists, but is empty then Anonymous, otherwise Anonymous.
-                    Username = row.Count > 34 ?  string.IsNullOrEmpty(row[34].ToString()) ? "Anonymous" : row[34].ToString() : "Anonymous", 
+                    //So if it exists, but is empty then Anonymous, otherwise it doesnt exist so Anonymous, otherwise it exists and has a value so Value.
+                    Username = row.Count > 34 ? string.IsNullOrEmpty(row[34].ToString()) ? "Anonymous" : row[34].ToString() : "Anonymous",
                     Profile = null,
                     UserIcon = null,
-                    UserEmail = "None"
+                    UserEmail = "None",
+                    HasClaimed = false
 
                 };
 
@@ -190,7 +385,7 @@ namespace website.Controllers.BusinessLogic.GoogleReader
 
                 var game = new Game()
                 {
-                    UserId = null,
+                    User = user,
                     DateEntered = Convert.ToDateTime(row[0].ToString()),
                     GameDetail = details
                 };
@@ -201,10 +396,15 @@ namespace website.Controllers.BusinessLogic.GoogleReader
 
             }
 
-
-
             return inserts;
         }
+
+
+        /* The following methods take smaller portions of the entire row and work with it for setting upt he GameDetails
+         */
+
+
+
         public ICollection<HeroTeam> RetrieveHeroTeam(IEnumerable<object> row)
         {
             //Hero Team is a multi side of a relationship table, so we'll make a list for each one and get it ready. The Hero will need to be found in the db before insertion.
@@ -213,7 +413,7 @@ namespace website.Controllers.BusinessLogic.GoogleReader
             bool heroField = true;
             int position = 1;
 
-            var hero = new Hero();
+            string heroName = null;
             
 
             foreach(var entry in row)
@@ -222,23 +422,22 @@ namespace website.Controllers.BusinessLogic.GoogleReader
                 if(heroField)
                 {
                     //Save the hero name
-                    hero.Name = entry.ToString().Equals("(none)") ? null : entry.ToString();
+                    heroName = entry.ToString().Equals("(none)") ? null : entry.ToString();
                     
                     //Set it so the next pass through the iEnumberable will set the position/incap data
                     heroField = false;
 
                 }
-                else if (!string.IsNullOrEmpty(hero.Name)) // if the hero.Name has been set to null then there is no hero to add to the list.
+                else if (!string.IsNullOrEmpty(heroName)) // if the hero.Name has been set to null then there is no hero to add to the list.
                 {
                     var teamMember = new HeroTeam()
                     {
-                        Hero = hero,
+                        HeroId = HeroIDs[heroName],
                         Position = position,
                         Incapped = !string.IsNullOrEmpty(entry.ToString())
                     };
                     // Reset - increase position by 1, get a clean hero, and set heroField true so it will get the new hero
                     position++;
-                    hero = new Hero();
                     heroField = true;
 
                     heroTeam.Add(teamMember);
