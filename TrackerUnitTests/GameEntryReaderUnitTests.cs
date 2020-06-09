@@ -1,5 +1,6 @@
 using Google;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Linq;
@@ -90,6 +91,56 @@ namespace TrackerUnitTests
 
             Assert.AreEqual(24, environmentsUsed.First().GameEnvironmentId);
         }
+
+        [TestMethod]
+        public void GameModeIsDiscoverable()
+        {
+            GoogleRead reader = new GoogleRead();
+
+            string path = @"C:\Users\lynkf\Desktop\SentinelsTracker\website\wwwroot\Data\app_client_secret.json";
+            reader.Init(path);
+
+            IList<IList<object>> values = reader.GetValues(SpreadsheetId, "TestEntry").Values;
+
+            var normalRow = values[2].Skip(13).Take(2);
+            var advancedRow = values[4].Skip(13).Take(2);
+            var challengeRow = values[3].Skip(13).Take(2);
+            var ultimateRow = values[5].Skip(13).Take(2);
+
+            var normal = (GameDetail.GameModes)Enum.Parse(typeof(GameDetail.GameModes), "Normal");
+            var advanced = (GameDetail.GameModes)Enum.Parse(typeof(GameDetail.GameModes), "Advanced");
+            var challenge = (GameDetail.GameModes)Enum.Parse(typeof(GameDetail.GameModes), "Challenge");
+            var ultimate = (GameDetail.GameModes)Enum.Parse(typeof(GameDetail.GameModes), "Ultimate");
+
+            Assert.AreEqual(normal, reader.ExtractGameMode(normalRow));
+            Assert.AreEqual(advanced, reader.ExtractGameMode(advancedRow));
+            Assert.AreEqual(challenge, reader.ExtractGameMode(challengeRow));
+            Assert.AreEqual(ultimate, reader.ExtractGameMode(ultimateRow));
+        }
+
+        [TestMethod]
+        public void EndGameConditionConversion()
+        {
+            GoogleRead reader = new GoogleRead();
+
+            string path = @"C:\Users\lynkf\Desktop\SentinelsTracker\website\wwwroot\Data\app_client_secret.json";
+            reader.Init(path);
+
+            IList<IList<object>> values = reader.GetValues(SpreadsheetId, "TestEntry").Values;
+
+            var expectedVillain = values[2][16].ToString();
+            var expectedHero = values[4][16].ToString();
+            var expectedSucker = values[6][16].ToString();
+
+            var villainIncap = (GameDetail.GameEndConditions)Enum.Parse(typeof(GameDetail.GameEndConditions), "IncapVillain");
+            var heroLoss = (GameDetail.GameEndConditions)Enum.Parse(typeof(GameDetail.GameEndConditions), "IncapHeroes");
+            var suckerPunch = (GameDetail.GameEndConditions)Enum.Parse(typeof(GameDetail.GameEndConditions), "Destroyed");
+
+            Assert.AreEqual(villainIncap, reader.ExtractEndCondition(expectedVillain));
+            Assert.AreEqual(heroLoss, reader.ExtractEndCondition(expectedHero));
+            Assert.AreEqual(suckerPunch, reader.ExtractEndCondition(expectedSucker));
+        }
+
     }
 }
 

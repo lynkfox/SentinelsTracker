@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using website.Models;
 using website.Models.databaseModels;
@@ -335,6 +336,30 @@ namespace website.Controllers.BusinessLogic.GoogleReader
             { "Windmill City" , 38 }
         };
 
+        private Dictionary<string, string> EndGameConditionConversion = new Dictionary<string, string>()
+        {
+            { "" , "IncapVillain" },
+            { "HP Incapacitation (Heroes)" , "IncapHeroes" },
+            { "Terra Lunar Impulsion Beam (Baron Blade)" , "TerraLunarImpulsionBeam" },
+            { "The Environment was Destroyed (Deadline)" , "WorldBurns" },
+            { "Did Not Protect Her (The Dreamer)" , "DidNotProtectHer" },
+            { "Relic Victory (Gloomweaver)" , "RelicVictory" },
+            { "Ate Himself (Skinwalker Gloomweaver)" , "ConsumedFromWithin" },
+            { "Minion Overrun (Voss)" , "MinionOverrun" },
+            { "The Crowd Turned Against the Heroes (Kaargra Warfang)" , "CrowdTurns" },
+            { "Omnitron's Devices After Omnitron died" , "OmnitronLivesOn" },
+            { "Wager Master Alternate Win Condition" , "WagerWin" },
+            { "Wager Master Alternate Loose Condition" , "WagerLoss" },
+            { "OblivAeonBetrayed" , "OblivAeonBetrayed" },
+            { "Sentenced to Destruction (Celestial Tribunal)" , "Sentanced" },
+            { "Engines Failed (Mobile Defense Platform)" , "EnginesFailed" },
+            { "Time Portal Closed (Silver Gulch 1883 )" , "PortalClosed" },
+            { "Mars Base Explosion (Wagner)" , "SelfDestruct" },
+            { "Environment Card Killed Villain" , "Environment" },
+            { "Sucker Punch, Final Dive, and other Destroy Cards" , "Destroyed" },
+            { "Incapacitated Hero Ability" , "IncapAbility" },
+            { "Other" , "Other" }
+        };
 
         //Set Up the Connection to the google API
         public void Init(string directoryPath)
@@ -420,6 +445,8 @@ namespace website.Controllers.BusinessLogic.GoogleReader
                    HeroTeams = CreateHeroTeams(ExtractHeroTeam(row.Skip(17).Take(10))),
                    VillainTeams = CreateVillainTeams(ExtractVillainTeam(row.Skip(1).Take(15))),
                    EnvironmentsUsed = CreateEnvironmentsUsed(row[27].ToString()),
+                   GameMode = ExtractGameMode(row.Skip(13).Take(2)),
+                   GameEndCondition = ExtractEndCondition(row[16].ToString()),
                 };
 
 
@@ -445,6 +472,8 @@ namespace website.Controllers.BusinessLogic.GoogleReader
         }
 
         
+
+
 
 
         /* The following methods take smaller portions of the entire row and work with it for setting upt he GameDetails
@@ -584,6 +613,34 @@ namespace website.Controllers.BusinessLogic.GoogleReader
 
             return environmentsUsed;
         }
+
+
+        public GameDetail.GameModes ExtractGameMode(IEnumerable<object> row)
+        {
+            bool advanced = row.First().ToString() == "Yes";
+            bool challenge = !string.IsNullOrEmpty(row.Last().ToString());
+
+            string type = advanced && challenge ? "Ultimate"
+                        : advanced ? "Advanced"
+                        : challenge ? "Challenge"
+                        : "Normal";
+
+            return (GameDetail.GameModes)Enum.Parse(typeof(GameDetail.GameModes), type);
+        }
+
+        public GameDetail.GameEndConditions ExtractEndCondition(string entry)
+        {
+            /*Unforuntately the data for Game End Conditions is set for Readability and we're using an Enum in the database 
+             * (which is difficult to use with Strings in EF) 
+             * 
+             * so we'll use a dictionary to convert between the two for speed.
+             * 
+             */
+
+
+            return (GameDetail.GameEndConditions)Enum.Parse(typeof(GameDetail.GameEndConditions), EndGameConditionConversion[entry]);
+        }
+
 
 
         /* Edge Cases
