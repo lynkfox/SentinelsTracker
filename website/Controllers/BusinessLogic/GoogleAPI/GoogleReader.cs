@@ -3,6 +3,7 @@ using Google.Apis.Services;
 using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -413,19 +414,19 @@ namespace website.Controllers.BusinessLogic.GoogleReader
             int position = 1;
 
 
-            List<IEnumerable<object>> teamMembers = ExtractHeroTeam(row);
+            List<(string name, bool flip)> teamMembers = ExtractHeroTeam(row);
 
             foreach(var member in teamMembers)
             {
-                if(member.First().ToString() == "(none)")
+                if(member.name == "(none)")
                 { // (none) indicates no one in that position, and as they are supposed to be in order... (might need todouble check that)
                     break;
                 }
                 var teamMember = new HeroTeam()
                 {
-                    HeroId = HeroIDs[member.First().ToString()],
+                    HeroId = HeroIDs[member.name],
                     Position = position,
-                    Incapped = !string.IsNullOrEmpty(member.Last().ToString())
+                    Incapped = member.flip
                 };
                 // Reset - increase position by 1, get a clean hero, and set heroField true so it will get the new hero
                 position++;
@@ -450,16 +451,16 @@ namespace website.Controllers.BusinessLogic.GoogleReader
                 int position = 1;
 
                 //10 columns of possible villains, add them in sections of 2 to divide them up with their possible incaps.
-                List<IEnumerable<object>> teamVillains = ExtractVillainTeam(row);
+                List<(string name, bool flip)> teamVillains = ExtractVillainTeam(row);
 
                 foreach (var member in teamVillains)
                 {
-                    if (string.IsNullOrEmpty(member.First().ToString()))
+                    if (string.IsNullOrEmpty(member.name))
                     { // if there is no entry in the first then there was no villain so we can break early.
                         break;
                     }
 
-                    string villainName = RemoveExtraVengeanceTag(member.First().ToString());
+                    string villainName = RemoveExtraVengeanceTag(member.name);
 
                     int villainCorrectedID = VillainIDCorrection(villainName);
 
@@ -467,7 +468,7 @@ namespace website.Controllers.BusinessLogic.GoogleReader
                     {
                         VillainId = villainCorrectedID,
                         Position = position,
-                        Flipped = !string.IsNullOrEmpty(member.Last().ToString()),
+                        Flipped = member.flip,
                         VillainTeamGame = team
                     };
 
@@ -495,25 +496,31 @@ namespace website.Controllers.BusinessLogic.GoogleReader
             return villainTeam;
         }
 
-        private List<IEnumerable<object>> ExtractVillainTeam(IEnumerable<object> row)
+        private List<(string name, bool flip)> ExtractVillainTeam(IEnumerable<object> row)
         {
-            List<IEnumerable<object>> teamMembers = new List<IEnumerable<object>>();
+            var teamMembers = new List<(string name, bool flip)>();
+            var columns = row.ToList();
 
             for (int i = 1; i < 10; i += 2)
             {
-                teamMembers.Add(row.Skip(i).Take(2));
+                var memberStatus = ( name: columns[i].ToString(), flip: !string.IsNullOrEmpty(columns[i+1].ToString()));
+
+                teamMembers.Add(memberStatus);
             }
 
             return teamMembers;
         }
 
-        private List<IEnumerable<object>> ExtractHeroTeam(IEnumerable<object> row)
+        private List<(string name, bool flip)> ExtractHeroTeam(IEnumerable<object> row)
         {
-            List<IEnumerable<object>> teamMembers = new List<IEnumerable<object>>();
+            var teamMembers = new List<(string name, bool flip)>();
+            var columns = row.ToList();
 
             for (int i = 0; i < 10; i += 2)
             {
-                teamMembers.Add(row.Skip(i).Take(2));
+                var memberStatus = (name: columns[i].ToString(), flip: !string.IsNullOrEmpty(columns[i + 1].ToString()));
+
+                teamMembers.Add(memberStatus);
             }
 
             return teamMembers;
