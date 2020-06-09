@@ -413,10 +413,13 @@ namespace website.Controllers.BusinessLogic.GoogleReader
 
                 };
 
+
+
                 var details = new GameDetail()
                 {
-                   HeroTeams = RetrieveHeroTeam(ExtractHeroTeam(row.Skip(17).Take(10))),
-                   VillainTeams = RetrieveVillains(ExtractVillainTeam(row.Skip(1).Take(15)))
+                   HeroTeams = CreateHeroTeams(ExtractHeroTeam(row.Skip(17).Take(10))),
+                   VillainTeams = CreateVillainTeams(ExtractVillainTeam(row.Skip(1).Take(15))),
+                   EnvironmentsUsed = CreateEnvironmentsUsed(row[27].ToString()),
                 };
 
 
@@ -441,13 +444,15 @@ namespace website.Controllers.BusinessLogic.GoogleReader
             return inserts;
         }
 
+        
+
 
         /* The following methods take smaller portions of the entire row and work with it for setting upt he GameDetails
          */
 
 
 
-        public ICollection<HeroTeam> RetrieveHeroTeam(List<(string name, bool flip)> teamMembers)
+        public ICollection<HeroTeam> CreateHeroTeams(List<(string name, bool flip)> teamMembers)
         {
             //Hero Team is a multi side of a relationship table, so we'll make a list for each one and get it ready. The Hero will need to be found in the db before insertion.
 
@@ -477,7 +482,7 @@ namespace website.Controllers.BusinessLogic.GoogleReader
         }
 
 
-        public ICollection<VillainTeam> RetrieveVillains(List<(string name, bool flip)> teamVillains)
+        public ICollection<VillainTeam> CreateVillainTeams(List<(string name, bool flip)> teamVillains)
         {
             var villainTeam = new List<VillainTeam>();
 
@@ -542,9 +547,7 @@ namespace website.Controllers.BusinessLogic.GoogleReader
 
                     teamMembers.Add(memberStatus);
                 }
-
             }
-            
 
             return teamMembers;
         }
@@ -562,6 +565,24 @@ namespace website.Controllers.BusinessLogic.GoogleReader
             }
 
             return teamMembers;
+        }
+
+        public ICollection<EnvironmentUsed> CreateEnvironmentsUsed(string row)
+        {
+            var environmentsUsed = new List<EnvironmentUsed>();
+
+
+            //EnvironmentsUsed are a Many from a 1:Many relationship in the database due to OblivAeon being able to destroy them.
+            //However there are no OblivAeon games in the database, so we just have to fake it for the database.
+            environmentsUsed.Add(new EnvironmentUsed
+            {
+                GameEnvironmentId = EnvironmentIds[row],
+                Destroyed = false,
+                OblivAeonOrderAppeared = 0,
+                OblivAeonZone = 0
+            });
+
+            return environmentsUsed;
         }
 
 
