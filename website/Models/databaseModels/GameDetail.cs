@@ -66,8 +66,7 @@ namespace website.Models.databaseModels
         {
             Physical, 
             Steam,
-            iOS,
-            Android,
+            Mobile, //for iOS/Android both phones and Tablets.
             TableTopSimulator,
             Other
         }
@@ -121,13 +120,13 @@ namespace website.Models.databaseModels
 
         public enum GameTimeLengths
         {
-            //Enum - 0-15mins, 16-30mins, 31-45mins, 45-1h, 1hr-5hrs, 5+hrs
-            ZeroToFifteenMin,
-            SixteenToThirtyMin,
-            ThirtyOneToFortyFiveMin,
-            FortySixToSixtyMin,
-            OneToFiveHours,
-            FivePlusHours,
+            //Enum - 0-30mins, 30-44mins, 45-1h, 1hr-1.5hours, 1.5+, Unmarked, Other
+            LessThanThirty,
+            ThirtyToFortyFour,
+            FortyFiveToFiftyNine,
+            OneHourToOneAndHalfHours,
+            MoreThanOneAndHalfHours,
+            Unmarked,
             Other
 
         }

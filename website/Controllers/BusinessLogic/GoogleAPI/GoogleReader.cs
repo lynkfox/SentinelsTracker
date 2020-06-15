@@ -335,40 +335,58 @@ namespace website.Controllers.BusinessLogic.GoogleReader
             { "Windmill City" , 38 }
         };
 
-        private Dictionary<string, string> EndGameConditionConversion = new Dictionary<string, string>()
+        private Dictionary<string, GameDetail.GameEndConditions> EndGameConditionConversion = new Dictionary<string, GameDetail.GameEndConditions>()
         {
-            { "" , "IncapVillain" },
-            { "HP Incapacitation (Heroes)" , "IncapHeroes" },
-            { "Terra Lunar Impulsion Beam (Baron Blade)" , "TerraLunarImpulsionBeam" },
-            { "The Environment was Destroyed (Deadline)" , "WorldBurns" },
-            { "Did Not Protect Her (The Dreamer)" , "DidNotProtectHer" },
-            { "Relic Victory (Gloomweaver)" , "RelicVictory" },
-            { "Ate Himself (Skinwalker Gloomweaver)" , "ConsumedFromWithin" },
-            { "Minion Overrun (Voss)" , "MinionOverrun" },
-            { "The Crowd Turned Against the Heroes (Kaargra Warfang)" , "CrowdTurns" },
-            { "Omnitron's Devices After Omnitron died" , "OmnitronLivesOn" },
-            { "Wager Master Alternate Win Condition" , "WagerWin" },
-            { "Wager Master Alternate Loose Condition" , "WagerLoss" },
-            { "OblivAeonBetrayed" , "OblivAeonBetrayed" },
-            { "Sentenced to Destruction (Celestial Tribunal)" , "Sentanced" },
-            { "Engines Failed (Mobile Defense Platform)" , "EnginesFailed" },
-            { "Time Portal Closed (Silver Gulch 1883 )" , "PortalClosed" },
-            { "Mars Base Explosion (Wagner)" , "SelfDestruct" },
-            { "Environment Card Killed Villain" , "Environment" },
-            { "Sucker Punch, Final Dive, and other Destroy Cards" , "Destroyed" },
-            { "Incapacitated Hero Ability" , "IncapAbility" },
-            { "Other" , "Other" }
+            { "" , GameDetail.GameEndConditions.IncapVillain },
+            { "HP Incapacitation (Heroes)" , GameDetail.GameEndConditions.IncapHeroes },
+            { "Terra Lunar Impulsion Beam (Baron Blade)" , GameDetail.GameEndConditions.TerraLunarImpulsionBeam },
+            { "The Environment was Destroyed (Deadline)" , GameDetail.GameEndConditions.WorldBurns },
+            { "Did Not Protect Her (The Dreamer)" , GameDetail.GameEndConditions.DidNotProtectHer },
+            { "Relic Victory (Gloomweaver)" , GameDetail.GameEndConditions.RelicVictory },
+            { "Ate Himself (Skinwalker Gloomweaver)" , GameDetail.GameEndConditions.ConsumedFromWithin },
+            { "Minion Overrun (Voss)" , GameDetail.GameEndConditions.MinionOverrun },
+            { "The Crowd Turned Against the Heroes (Kaargra Warfang)" , GameDetail.GameEndConditions.CrowdTurns },
+            { "Omnitron's Devices After Omnitron died" , GameDetail.GameEndConditions.OmnitronLivesOn },
+            { "Wager Master Alternate Win Condition" , GameDetail.GameEndConditions.WagerWin },
+            { "Wager Master Alternate Loose Condition" , GameDetail.GameEndConditions.WagerLoss },
+            { "OblivAeonBetrayed" , GameDetail.GameEndConditions.OblivAeonBetrayed },
+            { "Sentenced to Destruction (Celestial Tribunal)" , GameDetail.GameEndConditions.Sentanced },
+            { "Engines Failed (Mobile Defense Platform)" , GameDetail.GameEndConditions.EnginesFailed },
+            { "Time Portal Closed (Silver Gulch 1883 )" , GameDetail.GameEndConditions.PortalClosed },
+            { "Mars Base Explosion (Wagner)" , GameDetail.GameEndConditions.SelfDestruct },
+            { "Environment Card Killed Villain" , GameDetail.GameEndConditions.Environment },
+            { "Sucker Punch, Final Dive, and other Destroy Cards" , GameDetail.GameEndConditions.Destroyed },
+            { "Incapacitated Hero Ability" , GameDetail.GameEndConditions.IncapAbility },
+            { "Other" , GameDetail.GameEndConditions.Other }
         };
 
-        private Dictionary<string, string> SelectionMethodConversion = new Dictionary<string, string>()
+        private Dictionary<string, GameDetail.SelectionMethods> SelectionMethodConversion = new Dictionary<string, GameDetail.SelectionMethods>()
         {
-            { "Player Choice" , "PlayerChoice" }, 
-            { "Randomizer Program" , "Random" },
-            { "Dice", "Random" },
-            { "Thematic Team, Villain, Environment", "Thematic" },
-            { "Scenario", "Thematic" },
-            { "Rematch", "Rematch" },
-            { "", "Other" }
+            { "Player Choice", GameDetail.SelectionMethods.PlayerChoice },
+            { "Randomizer Program", GameDetail.SelectionMethods.Random },
+            { "Dice", GameDetail.SelectionMethods.Random },
+            { "SotM Video Game Random Button", GameDetail.SelectionMethods.Random },
+            { "Thematic Team, Villain, Environment", GameDetail.SelectionMethods.Thematic },
+            { "Scenario", GameDetail.SelectionMethods.Thematic },
+            { "Rematch", GameDetail.SelectionMethods.Rematch },
+            { "", GameDetail.SelectionMethods.Other }
+        };
+
+        private Dictionary<string, GameDetail.Platforms> PlatformDetailConversion = new Dictionary<string, GameDetail.Platforms>()
+        {
+            { "Physical Cards", GameDetail.Platforms.Physical },
+            { "Steam", GameDetail.Platforms.Steam },
+            { "Tablet (iPad or Android)", GameDetail.Platforms.Mobile } //for iOS/Android both phones and Tablets.
+        };
+
+        private Dictionary<string, GameDetail.GameTimeLengths> TimeLengthConversion = new Dictionary<string, GameDetail.GameTimeLengths>()
+        {
+            { "<30" , GameDetail.GameTimeLengths.LessThanThirty },
+            { "30-44" , GameDetail.GameTimeLengths.ThirtyToFortyFour } ,
+            { "45-59" ,  GameDetail.GameTimeLengths.FortyFiveToFiftyNine } ,
+            { "60-90" , GameDetail.GameTimeLengths.OneHourToOneAndHalfHours} ,
+            { "90+" , GameDetail.GameTimeLengths.MoreThanOneAndHalfHours },
+            { "" , GameDetail.GameTimeLengths.Unmarked } 
         };
 
         //Set Up the Connection to the google API
@@ -456,9 +474,10 @@ namespace website.Controllers.BusinessLogic.GoogleReader
                    VillainTeams = CreateVillainTeams(ExtractVillainTeam(row.Skip(1).Take(15))),
                    EnvironmentsUsed = CreateEnvironmentsUsed(row[27].ToString()),
                    GameMode = ExtractGameMode(row.Skip(13).Take(2)),
-                   GameEndCondition = ExtractEndCondition(row[16].ToString()),
-                   SelectionMethod = ExtractSelectionMethod(row[28].ToString()),
-                   PerceivedDifficulty = PerceivedDiff(row[29])
+                   GameEndCondition = EndGameCond(row[16]),
+                   SelectionMethod = SelMethod(row),
+                   PerceivedDifficulty = PerceivedDiff(row),
+                   GameTimeLength = TimeToPlay(row)
                 };
 
 
@@ -482,10 +501,6 @@ namespace website.Controllers.BusinessLogic.GoogleReader
 
             return inserts;
         }
-
-     
-
-
 
 
 
@@ -643,30 +658,41 @@ namespace website.Controllers.BusinessLogic.GoogleReader
         }
 
 
-        public int PerceivedDiff(object entryField)
-        {
-            return string.IsNullOrEmpty(entryField.ToString()) ? 0 : int.Parse(entryField.ToString());
-        }
 
-        /* The next few methods are for converting from the sheets (which were set for Readability) into various Enums
+
+        /* The next few methods are for converting from the sheets (which were set for Readability) into various Enums and values.
          * that are better suited for internal structures with Entity Framework and Databases.
          * 
-         * So we'll use a dictionary and cast it back into the proper enum for the databse.
+         * So we'll use a dictionary to get the proper enum.
          * 
+         * 
+         * It is also possible for any or all of these fields to "not exist" because of the way the google API pulls, so there needs to be a check for if the row even
+         * contains the value we're looking for.
+         * 
+         * They are mostly here to make the main method up above look cleaner.
          */
 
-        public GameDetail.GameEndConditions ExtractEndCondition(string entry)
+        public GameDetail.GameEndConditions EndGameCond(object entry)
         {
             
-            return (GameDetail.GameEndConditions)Enum.Parse(typeof(GameDetail.GameEndConditions), EndGameConditionConversion[entry]);
+            return EndGameConditionConversion[entry.ToString()];
         }
 
-        public GameDetail.SelectionMethods ExtractSelectionMethod(string entry)
+        public GameDetail.SelectionMethods SelMethod(IList<object> entry)
         {
-            return (GameDetail.SelectionMethods)Enum.Parse(typeof(GameDetail.SelectionMethods), SelectionMethodConversion[entry]);
+            return entry.Count<28 ?GameDetail.SelectionMethods.Other : SelectionMethodConversion[entry[28].ToString()];
         }
 
 
+        public int PerceivedDiff(IList<object> entry)
+        {
+            return entry.Count < 29 || string.IsNullOrEmpty(entry[29].ToString()) ? 0 : int.Parse(entry[29].ToString());
+        }
+
+        public GameDetail.GameTimeLengths TimeToPlay(IList<object> entry)
+        {
+            return entry.Count < 30 ? GameDetail.GameTimeLengths.Unmarked : TimeLengthConversion[entry[30].ToString()];
+        }
 
         /* Edge Cases
          * 

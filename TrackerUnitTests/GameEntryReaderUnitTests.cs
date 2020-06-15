@@ -129,17 +129,17 @@ namespace TrackerUnitTests
 
             IList<IList<object>> values = reader.GetValues(SpreadsheetId, "TestEntry").Values;
 
-            var expectedVillain = values[2][16].ToString();
-            var expectedHero = values[4][16].ToString();
-            var expectedSucker = values[6][16].ToString();
+            var expectedVillain = values[2][16];
+            var expectedHero = values[4][16];
+            var expectedSucker = values[6][16];
 
             var villainIncap = (GameDetail.GameEndConditions)Enum.Parse(typeof(GameDetail.GameEndConditions), "IncapVillain");
             var heroLoss = (GameDetail.GameEndConditions)Enum.Parse(typeof(GameDetail.GameEndConditions), "IncapHeroes");
             var suckerPunch = (GameDetail.GameEndConditions)Enum.Parse(typeof(GameDetail.GameEndConditions), "Destroyed");
 
-            Assert.AreEqual(villainIncap, reader.ExtractEndCondition(expectedVillain));
-            Assert.AreEqual(heroLoss, reader.ExtractEndCondition(expectedHero));
-            Assert.AreEqual(suckerPunch, reader.ExtractEndCondition(expectedSucker));
+            Assert.AreEqual(villainIncap, reader.EndGameCond(expectedVillain));
+            Assert.AreEqual(heroLoss, reader.EndGameCond(expectedHero));
+            Assert.AreEqual(suckerPunch, reader.EndGameCond(expectedSucker));
         }
 
         [TestMethod]
@@ -152,14 +152,12 @@ namespace TrackerUnitTests
 
             IList<IList<object>> values = reader.GetValues(SpreadsheetId, "TestEntry").Values;
 
-            var playerChoice = values[3][28].ToString();
-            var selectedRandom = values[4][28].ToString();
 
             var expectedPlayerChoice = (GameDetail.SelectionMethods)Enum.Parse(typeof(GameDetail.SelectionMethods), "PlayerChoice");
             var expectedRandom = (GameDetail.SelectionMethods)Enum.Parse(typeof(GameDetail.SelectionMethods), "Random");
 
-            Assert.AreEqual(expectedPlayerChoice, reader.ExtractSelectionMethod(playerChoice));
-            Assert.AreEqual(expectedRandom, reader.ExtractSelectionMethod(selectedRandom));
+            Assert.AreEqual(expectedPlayerChoice, reader.SelMethod(values[3]));
+            Assert.AreEqual(expectedRandom, reader.SelMethod(values[4]));
         }
 
         [TestMethod]
@@ -172,9 +170,11 @@ namespace TrackerUnitTests
 
             IList<IList<object>> values = reader.GetValues(SpreadsheetId, "TestEntry").Values;
 
-            Assert.AreEqual(0, reader.PerceivedDiff(values[2][29]));
-            Assert.AreEqual(5, reader.PerceivedDiff(values[4][29]));
+            Assert.AreEqual(0, reader.PerceivedDiff(values[2]));
+            Assert.AreEqual(5, reader.PerceivedDiff(values[4]));
         }
+
+        
 
     }
 }
