@@ -457,7 +457,8 @@ namespace website.Controllers.BusinessLogic.GoogleReader
                    EnvironmentsUsed = CreateEnvironmentsUsed(row[27].ToString()),
                    GameMode = ExtractGameMode(row.Skip(13).Take(2)),
                    GameEndCondition = ExtractEndCondition(row[16].ToString()),
-                   SelectionMethod = ExtractSelectionMethod(row[28].ToString())
+                   SelectionMethod = ExtractSelectionMethod(row[28].ToString()),
+                   PerceivedDifficulty = PerceivedDiff(row[29])
                 };
 
 
@@ -482,7 +483,9 @@ namespace website.Controllers.BusinessLogic.GoogleReader
             return inserts;
         }
 
-        
+     
+
+
 
 
 
@@ -637,6 +640,12 @@ namespace website.Controllers.BusinessLogic.GoogleReader
                         : "Normal";
 
             return (GameDetail.GameModes)Enum.Parse(typeof(GameDetail.GameModes), type);
+        }
+
+
+        public int PerceivedDiff(object entryField)
+        {
+            return string.IsNullOrEmpty(entryField.ToString()) ? 0 : int.Parse(entryField.ToString());
         }
 
         /* The next few methods are for converting from the sheets (which were set for Readability) into various Enums
