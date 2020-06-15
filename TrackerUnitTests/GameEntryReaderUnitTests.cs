@@ -184,6 +184,7 @@ namespace TrackerUnitTests
 
             IList<IList<object>> values = reader.GetValues(SpreadsheetId, "TestEntry").Values;
 
+
             Assert.AreEqual(null, reader.Comments(values[2]));
             Assert.AreEqual("Test", reader.Comments(values[3]));
             Assert.AreEqual(null, reader.Comments(values[6]));

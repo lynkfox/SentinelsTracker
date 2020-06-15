@@ -48,74 +48,73 @@ namespace website.Controllers.BusinessLogic.GoogleReader
             { "Absolute Zero: Freedom Six (Elemental Wrath)" , 4 },
             { "Akash'Thriya" , 5 },
             { "Akash'Thriya: Spirit of the Void" , 6 },
-            { "Argent Adept, The" , 7 },
-            { "Argent Adept, The: Prime Wardens" , 8 },
-            { "Argent Adep, The: Dark Conductor" , 9 },
-            { "Argent Adept, The: XTREME Prime Wardens" , 10 },
+            { "Argent Adept" , 7 },
+            { "Argent Adept: Prime Warden" , 8 },
+            { "Argent Adep, The: Dark Conductor (Kvothe)" , 9 },
+            { "Argent Adept: XTREME Prime Warden" , 10 },
             { "Benchmark" , 11 },
             { "Benchmark: Supply and Demand" , 12 },
             { "Bunker" , 13 },
-            { "Bunker: GI Bunker" , 14 },
+            { "Bunker: GI" , 14 },
             { "Bunker: Termi-Nation" , 15 },
             { "Bunker: Freedom Five" , 16 },
             { "Bunker: Freedom Six (Engine of War)" , 17 },
             { "Captain Cosmic" , 18 },
-            { "Captain Cosmic: Prime Wardens" , 19 },
+            { "Captain Cosmic: Prime Warden" , 19 },
             { "Captain Cosmic: Requital" , 20 },
-            { "Captain Cosmic: XTREME Prime Wardens" , 21 },
+            { "Captain Cosmic: XTREME Prime Warden" , 21 },
             { "Chrono-Ranger" , 22 },
-            { "Chrono-Ranger: The Best of Times" , 23 },
-            { "Comodora, La" , 24 },
-            { "Comodora, La: Curse of the Black Spot" , 25 },
+            { "Chrono-Ranger: Best of Times" , 23 },
+            { "La Comodora" , 24 },
+            { "La Comodora: Curse of the Black Spot" , 25 },
             { "Dr. Medico: Void Guard" , 26 },
-            { "Dr. Medico: Malpractice" , 27 },
+            { "Dr. Medico: Void Guard, Malpractice" , 27 },
             { "Expatriette" , 28 },
             { "Expatriette: Dark Watch" , 29 },
             { "Fanatic" , 30 },
             { "Fanatic: Redeemer" , 31 },
-            { "Fanatic: Prime Wardens" , 32 },
-            { "Fanatic: XTREME Prime Wardens" , 33 },
+            { "Fanatic: Prime Warden" , 32 },
+            { "Fanatic: XTREME Prime Warden" , 33 },
             { "Guise" , 34 },
             { "Guise, Santa" , 35 },
             { "Guise, Completionist" , 36 },
             { "Haka" , 37 },
-            { "Haka: Prime Wardens" , 38 },
-            { "Haka: XTREME Prime Wardens" , 39 },
-            { "Haka: The Eternal" , 40 },
-            { "Harpy, The" , 41 },
-            { "Harpy, The: Dark Watch" , 42 },
+            { "Haka: Prime Warden" , 38 },
+            { "Haka: XTREME Prime Warden" , 39 },
+            { "Haka: Eternal" , 40 },
+            { "Harpy" , 41 },
+            { "Harpy: Dark Watch" , 42 },
             { "Idealist: Void Guard" , 43 },
-            { "Idealist: Super Sentai" , 44 },
+            { "Idealist: Void Guard, Super Sentai" , 44 },
             { "K.N.Y.F.E." , 45 },
             { "K.N.Y.F.E.: Rogue Agent" , 46 },
             { "Legacy" , 47 },
-            { "Legacy: America's Newest (Beacon)" , 48 },
-            { "Legacy: America's Greatest" , 49 },
+            { "Legacy: Young" , 48 },
+            { "Legacy: Greatest" , 49 },
             { "Legacy: Freedom Five" , 50 },
-            { "Legacy: America's Cleverist" , 51 },
             { "Lifeline" , 52 },
             { "Lifeline: Bloodmage" , 53 },
             { "Luminary" , 54 },
-            { "Luminary: Ivana Ramonat" , 55 },
+            { "Luminary: Heroic (Ivana)" , 55 },
             { "Mainstay: Void Guard" , 56 },
-            { "Mainstay: Road Warrior" , 57 },
+            { "Mainstay: Void Guard, Road Warrior" , 57 },
             { "Mr. Fixer" , 58 },
             { "Mr. Fixer: Dark Watch" , 59 },
-            { "Naturalist, The" , 60 },
-            { "Naturalst, The Hunted" , 61 },
+            { "Naturalist" , 60 },
+            { "Naturalst: Hunted" , 61 },
             { "Nightmist" , 62 },
             { "Nightmist: Dark Watch" , 63 },
             { "Omnitron-X" , 64 },
-            { "Omnitron-U" , 65 },
+            { "Omnitron-X: Omnitron-U" , 65 },
             { "Parse" , 66 },
             { "Parse: Fugue State" , 67 },
             { "Ra" , 68 },
             { "Ra: Horus of the Two Horizons" , 69 },
-            { "Ra: The Setting Sun" , 70 },
-            { "Scholar, The" , 71 },
-            { "Scholar of the Infinite, The" , 72 },
-            { "Sentinels, The" , 73 },
-            { "Sentinels, The Adamant" , 74 },
+            { "Ra: Setting Sun" , 70 },
+            { "Scholar" , 71 },
+            { "Scholar: Of the Infinite, The" , 72 },
+            { "The Sentinels", 73 },
+            { "The Sentinels: Adamant" , 74 },
             { "Setback" , 75 },
             { "Setback: Darkwatch" , 76 },
             { "Sky-Scraper" , 77 },
@@ -127,187 +126,88 @@ namespace website.Controllers.BusinessLogic.GoogleReader
             { "Tachyon: Freedom Five" , 83 },
             { "Tachyon: Freedom Six (Team Leader)" , 84 },
             { "Tempest" , 85 },
-            { "Tempest: Prime Wardens" , 86 },
+            { "Tempest: Prime Warden" , 86 },
             { "Tempest: Freedom Six (Sacrifice)" , 87 },
-            { "Tempest: XTREME Prime Wardens" , 88 },
+            { "Tempest: XTREME Prime Warden" , 88 },
             { "Unity" , 89 },
             { "Unity: Termi-Nation" , 90 },
             { "Unity: Freedom Six (Golem)" , 91 },
-            { "Visionary, The" , 92 },
-            { "Visionary, Dark" , 93 },
-            { "Visionary, The: Unleashed" , 94 },
-            { "Wraith, The" , 95 },
-            { "Wraith, The Rook City" , 96 },
-            { "Wraith, The: Freedom Five" , 97 },
-            { "Wraith, The: Freedom Six (Price of Freedom)" , 98 },
+            { "Visionary" , 92 },
+            { "Visionary: Dark" , 93 },
+            { "Visionary: Unleashed" , 94 },
+            { "Wraith" , 95 },
+            { "Wraith: Rook City" , 96 },
+            { "Wraith: Freedom Five" , 97 },
+            { "Wraith: Freedom Six (Price of Freedom)" , 98 },
             { "Writhe: Void Guard" , 99 },
             { "Writhe: Cosmic Inventor" , 100 },
-            { "Baccarat" , 101 },
-            { "Baccarat: Ace of Swords" , 102 },
-            { "Baccarat: Ace of Sorrows" , 103 },
-            { "Baccarat: 1929" , 104 },
-            { "Doc Havoc" , 105 },
-            { "Doc Havoc: First Response" , 106 },
-            { "Doc Havoc: 2199" , 107 },
-            { "Knight, The" , 108 },
-            { "Knight, The Fair" , 109 },
-            { "Knight, The Berserker" , 110 },
-            { "Knight, The: 1929" , 111 },
-            { "Knight, The: Wasteland Ronin" , 112 },
-            { "Lady of the Wood" , 113 },
-            { "Lady of the Wood: Season of Change" , 114 },
-            { "Lady of the Wood: Ministry of Strategic Science" , 115 },
-            { "Lady of the Wood: 2199" , 116 },
-            { "Malichae" , 117 },
-            { "Malichae: Shardmaster" , 118 },
-            { "Malichae: Ministry of Strategic Science" , 119 },
-            { "Necro" , 120 },
-            { "Necro: Warden of Chaos" , 121 },
-            { "Necro: 1929" , 122 },
-            { "Quicksilver" , 123 },
-            { "Quicksilver, The Uncanny" , 124 },
-            { "Quicksilver: Renegade" , 125 },
-            { "Starlight" , 126 },
-            { "Starlight: Genesis" , 127 },
-            { "Starlight: Nightlore Council" , 128 },
-            { "Stranger, The" , 129 },
-            { "Stranger, The Rune-Carved" , 130 },
-            { "Stranger, The: 1929" , 131 },
-            { "Stranger, The: Wasteland Ronin" , 132 },
-            { "Tango One" , 133 },
-            { "Tango One: Ghost Ops" , 134 },
-            { "Tango One: 1929" , 135 },
-            { "Vanish" , 136 },
-            { "Vanish: First Response" , 137 },
-            { "Vanish: 1929" , 138 },
-            { "Cricket" , 139 },
-            { "Cricket: First Response" , 140 },
-            { "Cricket: Renegade" , 141 },
-            { "Cricket: Wasteland Ronin" , 142 },
-            { "Cypher" , 143 },
-            { "Cypher: First Response" , 144 },
-            { "Cypher: Swarming Protocol" , 145 },
-            { "Titan" , 146 },
-            { "Titan: Ministry of Strategic Science" , 147 },
-            { "Titan: 2199" , 148 },
-            { "Echelon" , 149 },
-            { "Echelon: First Response" , 150 },
-            { "Echelon: 2199" , 151 },
-            { "Impact" , 152 },
-            { "Impact: Renegade" , 153 },
-            { "Impact: Wasteland Ronin" , 154 },
-            { "Magnificent Mara" , 155 },
-            { "Magnificent Mara: 1929" , 156 },
-            { "Magnificent Mara: Ministry of Strategic Science" , 157 },
-            { "Drift" , 158 },
-            { "Drift: Through the Breach" , 159 },
-            { "Drift: 1929/2199" , 160 },
-            { "Gargoyle" , 161 },
-            { "Gargoyle: 2199" , 162 },
-            { "Gargoyle: Wasteland Ronin" , 163 },
-            { "Gyrosaur" , 164 },
-            { "Gyrosaur: Speed Demon" , 165 },
-            { "Gyrosaur: Renegade" , 166 },
-            { "Pyre" , 167 },
-            { "Pyre, The Unstable" , 168 },
-            { "Pyre: Wasteland Ronin" , 169 },
-            { "Terminus" , 170 },
-            { "Terminus: 2199" , 171 },
-            { "Terminus: Ministry of Strategic Science" , 172 }
         };
 
         private Dictionary<string, int> VillainIDs = new Dictionary<string, int>()
         {
-            {"Aeon Master", 1},
             {"Akash'Bhuta",2},
             {"Ambuscade",3},
+            {"Ambuscade (Vengeance)", 4},
             {"Apostate",5},
             {"Baron Blade",6},
-            {"Baron Blade, Mad Bomber",7},
-            {"Baron Blade: Vengeance Five",8},
-            {"Biomancer",9},
-            {"Borr the Unstable",10},
-            {"Bugbear",11},
+            {"Mad Bomber Blade",7},
+            {"Baron Blade (Vengeance)", 8},
+            {"Biomancer (Vengeance)",9},
+            {"Bugbear (Vengeance)",11},
             {"La Capitan",12},
-            {"Chairman, The",14},
+            {"La Capitan (Vengeance)",13},
+            {"The Chairman",14},
             {"Chokepoint",15},
             {"Citizen Dawn",16},
-            {"Citizens Hammer and Anvil",17},
-            {"Dark Mind",18},
+            {"Citizens Hammer and Anvil (Vengeance)",17},
             {"Deadline",19},
-            {"Dreamer, The",20},
-            {"Empyreon",21},
-            {"Ennead, The",22},
-            {"Ermine",23},
-            {"Faultless",24},
-            {"Friction",25},
-            {"Fright Train",26},
+            {"The Dreamer",20},
+            {"The Ennead",22},
+            {"Ermine (Vengeance)",23},
+            {"Friction (Vengeance)",25},
+            {"Fright Train (Vengeance)",26},
             {"Gloomweaver",27},
-            {"Gloomweaver, Skinwalker",28},
+            {"Skinwalker Gloomweaver",28},
             {"Grand Warlord Voss",29},
-            {"Ranek Kel'Voss",30},
-            {"Grezer Clutch",31},
+            {"Grezer Clutch (Vengeance)",31},
             {"Infinitor",32},
-            {"Infinitor: Tormented Ally",33},
+            {"Tormented Infinitor",33},
             {"Iron Legacy",34},
             {"Kaargra Warfang",35},
             {"Kismet",36},
-            {"Kismet, Trickster",37},
-            {"Matriarch, The",38},
+            {"Unstable Kismet",37},
+            {"The Matriarch",38},
             {"Miss Information",39},
+            {"Miss Information (Vengeance)",40},
             {"Nixious The Chosen",41},
-            {"OblivAeon",42},
             {"Omnitron",43},
-            {"Omnitron, Cosmic",44},
-            {"Operative, The",45},
+            {"Cosmic Omnitron",44},
+            {"The Operative (Vengeance)",45},
             {"Plague Rat",46},
+            {"Plague Rat (Vengeance)",46},
             {"Progeny",48},
-            {"Proletariat",50},
-            {"Sanction",51},
-            {"Sergeant Steel",52},
+            {"Proletariat (Vengeance)",50},
+            {"Sergeant Steel (Vengeance)",52},
             {"Spite",53},
-            {"Spite: Agent of Gloom",54},
-            {"Void Soul",55},
-            {"Wager Master",56},
-            {"Anathema",57},
-            {"Anathema, Evolved",58},
-            {"Dendron",59},
-            {"Dendron, Windcolor",60},
-            {"Gray",61},
-            {"Ram, The",62},
-            {"Ram, The: 1929",63},
-            {"Tiamat",64},
-            {"Tiamat, Hydra",65},
-            {"Oriphel",66},
-            {"Swarm Eater",67},
-            {"Swarm Eater, Hivemind",68},
-            {"Vector",69},
-            {"Phase",70},
-            {"Celadroch",71},
-            {"Menagerie",72},
-            {"Dynamo",73},
-            {"Infernal Choir, The",74},
-            {"Mistress of Fate, The",75},
-            {"Mythos",76},
-            {"Outlander",77},
-            {"Screamachine",78}
+            {"Agent of Gloom Spite",54},
+            {"Wager Master",56}
         };
 
         private Dictionary<string, int> EnvironmentIds = new Dictionary<string, int>()
         {
-            { "Block, The" , 2 },
-            { "Celestial Tribunal, The" , 2 },
+            { "The Block" , 2 },
+            { "Celestial Tribunal" , 2 },
             { "Champion Studios" , 3 },
-            { "Court Of Blood, The" , 4 },
-            { "Dok'Thorath Capital" , 5 },
+            { "The Court Of Blood" , 4 },
+            { "Dok'Thorath" , 5 },
             { "Enclave of the Endlings" , 6 },
             { "The Final Wasteland" , 7 },
             { "Fort Adamant" , 8 },
             { "Freedom Tower" , 9 },
             { "Insula Primalis" , 10 },
-            { "Madame Mittermeier's Fantastical Festival of Conundrums & Curiosities" , 11 },
-            { "Magmeria" , 12 },
-            { "Maerynian Refuge" , 13 },
+            { "Madame Mittermeier's" , 11 },
+            { "Magmaria" , 13 },
+            { "Maerynian Refuge" , 12 },
             { "Mobile Defense Platform" , 14 },
             { "Mordengrad" , 15 },
             { "Nexus of the Void" , 16 },
@@ -319,20 +219,7 @@ namespace website.Controllers.BusinessLogic.GoogleReader
             { "Temple of Zhu Long" , 22 },
             { "Time Cataclysm" , 23 },
             { "Tomb of Anubis" , 24 },
-            { "Wagner Mars " , 25 },
-            { "Blackwood Forest" , 26 },
-            { "F.S.C. Continuance Wanderer" , 27 },
-            { "Halberd Experimental Research Center" , 28 },
-            { "Northspar" , 29 },
-            { "St. Simeon's Catacombs" , 30 },
-            { "Wandering Isle" , 31 },
-            { "Cybersphere" , 32 },
-            { "Superstorm Akela" , 33 },
-            { "Catchwater Harbor 1929" , 34 },
-            { "Chasm of a Thousand Nights" , 35 },
-            { "Nightlore Citadel" , 36 },
-            { "Vault 5" , 37 },
-            { "Windmill City" , 38 }
+            { "Wagner Mars Base" , 25 }
         };
 
         private Dictionary<string, GameDetail.GameEndConditions> EndGameConditionConversion = new Dictionary<string, GameDetail.GameEndConditions>()
@@ -439,9 +326,9 @@ namespace website.Controllers.BusinessLogic.GoogleReader
          * Might only read in a thousand at a time?
          */
 
-        public List<insertReady> ConvertFromGoogleToModel(string spreadsheetID)
+        public List<Game> ConvertFromGoogleToModel(string spreadsheetID)
         {
-            var inserts = new List<insertReady>();
+            var inserts = new List<Game>();
 
 
             IList<IList<object>> values = GetValues(spreadsheetID, "TestEntry").Values;
@@ -492,6 +379,7 @@ namespace website.Controllers.BusinessLogic.GoogleReader
                     GameDetail = details
                 };
 
+                inserts.Add(game);
 
             }
 
@@ -535,6 +423,7 @@ namespace website.Controllers.BusinessLogic.GoogleReader
             return heroTeam;
         }
 
+        
 
         public ICollection<VillainTeam> CreateVillainTeams(List<(string name, bool flip)> teamVillains)
         {
@@ -558,13 +447,10 @@ namespace website.Controllers.BusinessLogic.GoogleReader
                     continue;
                 }
 
-                string villainName = RemoveExtraVengeanceTag(member.name);
-
-                int villainCorrectedID = team ? VillainIDCorrection(villainName) : VillainIDs[member.name];
                 
                 var teamMember = new VillainTeam()
                 {
-                    VillainId = villainCorrectedID,
+                    VillainId = VillainIDs[member.name],
                     Position = position,
                     Flipped = member.flip,
                     VillainTeamGame = team
@@ -588,8 +474,8 @@ namespace website.Controllers.BusinessLogic.GoogleReader
 
             //add the Solo Villain or Vengeance Team qualifier
 
-            var solo = (name: columns[0].ToString(), flip: !string.IsNullOrEmpty(columns[14].ToString()));
-            teamMembers.Add(solo);
+            var soloOrFirst = (name: columns[0].ToString(), flip: !string.IsNullOrEmpty(columns[14].ToString()));
+            teamMembers.Add(soloOrFirst);
 
             //add the team memberes if there are any
 
@@ -597,9 +483,9 @@ namespace website.Controllers.BusinessLogic.GoogleReader
             {
                 for (int i = 1; i < 10; i += 2)
                 {
-                    var memberStatus = (name: columns[i].ToString(), flip: !string.IsNullOrEmpty(columns[i + 1].ToString()));
+                    var nextTeamMember = (name: columns[i].ToString(), flip: !string.IsNullOrEmpty(columns[i + 1].ToString()));
 
-                    teamMembers.Add(memberStatus);
+                    teamMembers.Add(nextTeamMember);
                 }
             }
 
@@ -710,59 +596,7 @@ namespace website.Controllers.BusinessLogic.GoogleReader
         }
 
 
-        /* =========================================================================================================================================
-         * Edge Cases
-         * 
-         * 
-         * There are some edge cases and unique situations that need to be adjusted for from how the
-         * Team Villains are displayed in the Google Docs and how they are in the Database (cleaner in the db)
-         *
-         * Team Villains have " (Vengeance)" that needs to be removed and some edge cases
-         * 
-         * The Database allows duplicate names (bit cleaner for other aspects) and so the proper ID's for the Team Version need to be recovered
-         * 
-         * =========================================================================================================================================
-         */
-        private string RemoveExtraVengeanceTag(string villainName)
-        {
-            return villainName.Replace(" (Vengeance)", "");
-        }
-
-        private int VillainIDCorrection(string villainName)
-        {
-            /* Edge cases (duplicate names in database)
-             * 
-             * Ambuscade (team)
-             * La Capitan (Team)
-             * Baron Blade: Vengeance Five (team)
-             * Miss Information (team)
-             * Plague Rat (team)
-             * Progeny (Scion)
-             * 
-             * since the names have been added with specified ID's we can (and are) assuming the team version of the same villain is +1
-             * 
-             * (excepting Baron Blade because he has 2 additionals, but they have different names)
-             */
-
-            if(villainName == "Ambuscade" ||
-                villainName == "La Capitan" || 
-                villainName == "Miss Information" ||
-                villainName == "Plague Rat" ||
-                villainName == "Progeny")
-            {
-                return VillainIDs[villainName] + 1;
-            }
-
-            else if(villainName == "Baron Blade")
-            {
-                return VillainIDs["Baron Blade: Vengeance Five"];
-            }
-            else
-            {
-                return VillainIDs[villainName];
-            }
-
-        }
+       
 
 
 
