@@ -470,14 +470,19 @@ namespace website.Controllers.BusinessLogic.GoogleReader
 
                 var details = new GameDetail()
                 {
-                   HeroTeams = CreateHeroTeams(ExtractHeroTeam(row.Skip(17).Take(10))),
-                   VillainTeams = CreateVillainTeams(ExtractVillainTeam(row.Skip(1).Take(15))),
-                   EnvironmentsUsed = CreateEnvironmentsUsed(row[27].ToString()),
-                   GameMode = ExtractGameMode(row.Skip(13).Take(2)),
-                   GameEndCondition = EndGameCond(row[16]),
-                   SelectionMethod = SelMethod(row),
-                   PerceivedDifficulty = PerceivedDiff(row),
-                   GameTimeLength = TimeToPlay(row)
+                    HeroTeams = CreateHeroTeams(ExtractHeroTeam(row.Skip(17).Take(10))),
+                    VillainTeams = CreateVillainTeams(ExtractVillainTeam(row.Skip(1).Take(15))),
+                    EnvironmentsUsed = CreateEnvironmentsUsed(row[27].ToString()),
+                    GameMode = ExtractGameMode(row.Skip(13).Take(2)),
+                    GameEndCondition = EndGameCond(row[16]),
+                    Win = row[12].ToString() == "Yes",
+                    SelectionMethod = SelMethod(row),
+                    PerceivedDifficulty = PerceivedDiff(row),
+                    GameTimeLength = TimeToPlay(row),
+                    NumberOfPlayers = NumberOfPlayers(row),
+                    Rounds = Rounds(row),
+                    UserComment = Comments(row),
+                    CalculatedDifficulty = 0,
                 };
 
 
@@ -660,7 +665,9 @@ namespace website.Controllers.BusinessLogic.GoogleReader
 
 
 
-        /* The next few methods are for converting from the sheets (which were set for Readability) into various Enums and values.
+        /* ==============================================================================================================================
+         * 
+         * The next few methods are for converting from the sheets (which were set for Readability) into various Enums and values.
          * that are better suited for internal structures with Entity Framework and Databases.
          * 
          * So we'll use a dictionary to get the proper enum.
@@ -670,6 +677,8 @@ namespace website.Controllers.BusinessLogic.GoogleReader
          * contains the value we're looking for.
          * 
          * They are mostly here to make the main method up above look cleaner.
+         * 
+         * ==============================================================================================================================
          */
 
         public GameDetail.GameEndConditions EndGameCond(object entry)
@@ -694,15 +703,34 @@ namespace website.Controllers.BusinessLogic.GoogleReader
             return entry.Count < 30 ? GameDetail.GameTimeLengths.Unmarked : TimeLengthConversion[entry[30].ToString()];
         }
 
-        /* Edge Cases
+        public int NumberOfPlayers(IList<object> entry)
+        {
+            return entry.Count < 31 || string.IsNullOrEmpty(entry[31].ToString()) ? 0 : int.Parse(entry[31].ToString());
+        }
+
+        public int Rounds(IList<object> entry)
+        {
+            return entry.Count < 32 || string.IsNullOrEmpty(entry[32].ToString()) ? 0 : int.Parse(entry[32].ToString());
+        }
+
+        public string Comments(IList<object> entry)
+        {
+            return entry.Count < 35 || string.IsNullOrEmpty(entry[35].ToString()) ? null : entry[35].ToString(); 
+        }
+
+
+        /* =========================================================================================================================================
+         * Edge Cases
          * 
          * 
          * There are some edge cases and unique situations that need to be adjusted for from how the
-         *Team Villains are displayed in the Google Docs and how they are in the Database (cleaner in the db)
+         * Team Villains are displayed in the Google Docs and how they are in the Database (cleaner in the db)
          *
-         * Team Villains have " (Vengeance)" that needs to be removed
+         * Team Villains have " (Vengeance)" that needs to be removed and some edge cases
          * 
          * The Database allows duplicate names (bit cleaner for other aspects) and so the proper ID's for the Team Version need to be recovered
+         * 
+         * =========================================================================================================================================
          */
         private string RemoveExtraVengeanceTag(string villainName)
         {
@@ -746,14 +774,21 @@ namespace website.Controllers.BusinessLogic.GoogleReader
         }
 
 
+
+
+
+
         
 
-        /* These functions read in the game data from the primer doc.
+        /* ============================================================================================================
+         * 
+         * These functions read in the game data from the primer doc.
          * 
          * They were partially created to get a sense on how to use the Google Sheet API,
          * but also for use when first deploying. After the database is up and running and primed, these should be removed in
          * future live environments
          * 
+         * ============================================================================================================
          */
 
 
