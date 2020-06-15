@@ -216,7 +216,6 @@ namespace website.Controllers.BusinessLogic.GoogleReader
             { "Terminus: Ministry of Strategic Science" , 172 }
         };
 
-
         private Dictionary<string, int> VillainIDs = new Dictionary<string, int>()
         {
             {"Aeon Master", 1},
@@ -361,6 +360,17 @@ namespace website.Controllers.BusinessLogic.GoogleReader
             { "Other" , "Other" }
         };
 
+        private Dictionary<string, string> SelectionMethodConversion = new Dictionary<string, string>()
+        {
+            { "Player Choice" , "PlayerChoice" }, 
+            { "Randomizer Program" , "Random" },
+            { "Dice", "Random" },
+            { "Thematic Team, Villain, Environment", "Thematic" },
+            { "Scenario", "Thematic" },
+            { "Rematch", "Rematch" },
+            { "", "Other" }
+        };
+
         //Set Up the Connection to the google API
         public void Init(string directoryPath)
         {
@@ -447,6 +457,7 @@ namespace website.Controllers.BusinessLogic.GoogleReader
                    EnvironmentsUsed = CreateEnvironmentsUsed(row[27].ToString()),
                    GameMode = ExtractGameMode(row.Skip(13).Take(2)),
                    GameEndCondition = ExtractEndCondition(row[16].ToString()),
+                   SelectionMethod = ExtractSelectionMethod(row[28].ToString())
                 };
 
 
@@ -628,17 +639,22 @@ namespace website.Controllers.BusinessLogic.GoogleReader
             return (GameDetail.GameModes)Enum.Parse(typeof(GameDetail.GameModes), type);
         }
 
+        /* The next few methods are for converting from the sheets (which were set for Readability) into various Enums
+         * that are better suited for internal structures with Entity Framework and Databases.
+         * 
+         * So we'll use a dictionary and cast it back into the proper enum for the databse.
+         * 
+         */
+
         public GameDetail.GameEndConditions ExtractEndCondition(string entry)
         {
-            /*Unforuntately the data for Game End Conditions is set for Readability and we're using an Enum in the database 
-             * (which is difficult to use with Strings in EF) 
-             * 
-             * so we'll use a dictionary to convert between the two for speed.
-             * 
-             */
-
-
+            
             return (GameDetail.GameEndConditions)Enum.Parse(typeof(GameDetail.GameEndConditions), EndGameConditionConversion[entry]);
+        }
+
+        public GameDetail.SelectionMethods ExtractSelectionMethod(string entry)
+        {
+            return (GameDetail.SelectionMethods)Enum.Parse(typeof(GameDetail.SelectionMethods), SelectionMethodConversion[entry]);
         }
 
 

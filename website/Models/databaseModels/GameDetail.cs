@@ -78,6 +78,7 @@ namespace website.Models.databaseModels
             Random, //Any randomizer - In App, Website, helper app, rolling dice, picking blind...
             Difficulty, //By a specific difficulty rating
             Thematic, //By a team or other theme
+            Rematch, //Replay of previous game
             Other //Concated into another field, gathered by the Controller
         }
 

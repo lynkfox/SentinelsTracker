@@ -1,4 +1,5 @@
 using Google;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -139,6 +140,26 @@ namespace TrackerUnitTests
             Assert.AreEqual(villainIncap, reader.ExtractEndCondition(expectedVillain));
             Assert.AreEqual(heroLoss, reader.ExtractEndCondition(expectedHero));
             Assert.AreEqual(suckerPunch, reader.ExtractEndCondition(expectedSucker));
+        }
+
+        [TestMethod]
+        public void SelectionMethodConversion()
+        {
+            GoogleRead reader = new GoogleRead();
+
+            string path = @"C:\Users\lynkf\Desktop\SentinelsTracker\website\wwwroot\Data\app_client_secret.json";
+            reader.Init(path);
+
+            IList<IList<object>> values = reader.GetValues(SpreadsheetId, "TestEntry").Values;
+
+            var playerChoice = values[3][28].ToString();
+            var selectedRandom = values[4][28].ToString();
+
+            var expectedPlayerChoice = (GameDetail.SelectionMethods)Enum.Parse(typeof(GameDetail.SelectionMethods), "PlayerChoice");
+            var expectedRandom = (GameDetail.SelectionMethods)Enum.Parse(typeof(GameDetail.SelectionMethods), "Random");
+
+            Assert.AreEqual(expectedPlayerChoice, reader.ExtractSelectionMethod(playerChoice));
+            Assert.AreEqual(expectedRandom, reader.ExtractSelectionMethod(selectedRandom));
         }
 
     }
