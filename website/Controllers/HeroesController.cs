@@ -45,7 +45,7 @@ namespace website.Controllers
 
             var existingBoxes = _db.BoxSet.ToList();
 
-            _db.AddOrUpdateRange<Hero>(sheetReader.ReadHero(SpreadsheetId, existingBoxes));
+            
 
 
             await _db.SaveChangesAsync();

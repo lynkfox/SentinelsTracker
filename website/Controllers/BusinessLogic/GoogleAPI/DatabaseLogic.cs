@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Transactions;
 using website.Models;
 using website.Models.databaseModels;
-using website.Models.databaseModels.HelperModels;
 
 namespace website.Controllers.BusinessLogic.GoogleReader
 {
@@ -22,7 +21,7 @@ namespace website.Controllers.BusinessLogic.GoogleReader
         }
         
 
-        public async void LargeAdd(List<insertReady> entriesFromGoogleSheet)
+        public async void LargeAdd(List<Game> entriesFromGoogleSheet)
         {
             using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {

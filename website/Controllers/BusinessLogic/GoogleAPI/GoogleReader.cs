@@ -17,7 +17,6 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using website.Models;
 using website.Models.databaseModels;
-using website.Models.databaseModels.HelperModels;
 
 namespace website.Controllers.BusinessLogic.GoogleReader
 

@@ -10,8 +10,8 @@ using website.Models;
 namespace website.Data.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20200604163427_Initialized")]
-    partial class Initialized
+    [Migration("20200615192749_Startup")]
+    partial class Startup
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -489,11 +489,11 @@ namespace website.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool>("Flipped")
+                        .HasColumnType("bit");
+
                     b.Property<int?>("GameDetailID")
                         .HasColumnType("int");
-
-                    b.Property<bool>("Incapped")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("OblivAeon")
                         .HasColumnType("bit");

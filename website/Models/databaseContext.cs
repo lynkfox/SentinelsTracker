@@ -11,7 +11,6 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using website.Models.databaseModels;
-using website.Models.databaseModels.HelperModels;
 
 namespace website.Models
 {

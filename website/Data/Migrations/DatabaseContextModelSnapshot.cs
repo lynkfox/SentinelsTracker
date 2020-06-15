@@ -487,11 +487,11 @@ namespace website.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool>("Flipped")
+                        .HasColumnType("bit");
+
                     b.Property<int?>("GameDetailID")
                         .HasColumnType("int");
-
-                    b.Property<bool>("Incapped")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("OblivAeon")
                         .HasColumnType("bit");

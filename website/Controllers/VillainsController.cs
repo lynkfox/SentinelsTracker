@@ -35,23 +35,6 @@ namespace website.Controllers
             _config = config;
         }
 
-        public async Task<IActionResult> GoogleLoad()
-        {
-
-            var webRoot = _env.WebRootPath; // find the file on the server
-            string directoryPath = Path.Combine(webRoot, "Data", "app_client_secret.json"); // This will need to be in official secrets not just an open json :p
-
-            sheetReader.Init(directoryPath);
-
-            var existingBoxes = _db.BoxSet.ToList();
-
-            _db.AddOrUpdateRange<Villain>(sheetReader.ReadVillain(SpreadsheetId, existingBoxes));
-
-
-            await _db.SaveChangesAsync();
-
-            return RedirectToAction("Index");
-        }
 
         // GET: Villains
         public async Task<IActionResult> Index()

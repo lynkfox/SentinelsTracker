@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace website.Data.Migrations
 {
-    public partial class Initialized : Migration
+    public partial class Startup : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -373,7 +373,7 @@ namespace website.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     VillainTeamGame = table.Column<bool>(nullable: false),
                     Position = table.Column<int>(nullable: false),
-                    Incapped = table.Column<bool>(nullable: false),
+                    Flipped = table.Column<bool>(nullable: false),
                     OblivAeon = table.Column<bool>(nullable: false),
                     VillainId = table.Column<int>(nullable: false),
                     GameDetailID = table.Column<int>(nullable: true)

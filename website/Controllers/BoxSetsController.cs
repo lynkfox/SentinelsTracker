@@ -41,27 +41,7 @@ namespace website.Controllers
         }
 
 
-        /*Summary
-         * Retrieves a list of Box Sets from the GoogleSheet that contains them, then adds new and updates old
-         */
-
-
-        public async Task<IActionResult> GoogleLoad()
-        {
-
-            var webRoot = _env.WebRootPath; // find the file on the server
-            string directoryPath = Path.Combine(webRoot, "Data", "app_client_secret.json"); // This will need to be in official secrets not just an open json :p
-
-            boxSetReader.Init(directoryPath);
-            _db.AddOrUpdateRange<BoxSet>(boxSetReader.ReadBoxes(SpreadsheetId));
-
-            
-
-
-            await _db.SaveChangesAsync();
-
-            return RedirectToAction("Index");
-        }
+       
 
 
 
