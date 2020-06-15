@@ -174,7 +174,24 @@ namespace TrackerUnitTests
             Assert.AreEqual(5, reader.PerceivedDiff(values[4]));
         }
 
-        
+        [TestMethod]
+        public void CommentCanHandleEmpty()
+        {
+            GoogleRead reader = new GoogleRead();
+
+            string path = @"C:\Users\lynkf\Desktop\SentinelsTracker\website\wwwroot\Data\app_client_secret.json";
+            reader.Init(path);
+
+            IList<IList<object>> values = reader.GetValues(SpreadsheetId, "TestEntry").Values;
+
+            Assert.AreEqual(null, reader.Comments(values[2]));
+            Assert.AreEqual("Test", reader.Comments(values[3]));
+            Assert.AreEqual(null, reader.Comments(values[6]));
+
+        }
+
+
+
 
     }
 }

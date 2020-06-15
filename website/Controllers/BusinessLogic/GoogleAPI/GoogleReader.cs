@@ -485,12 +485,6 @@ namespace website.Controllers.BusinessLogic.GoogleReader
                     CalculatedDifficulty = 0,
                 };
 
-
-
-                
-
-
-
                 var game = new Game()
                 {
                     User = user,
@@ -498,9 +492,6 @@ namespace website.Controllers.BusinessLogic.GoogleReader
                     GameDetail = details
                 };
 
-                
-
-                
 
             }
 
@@ -689,33 +680,33 @@ namespace website.Controllers.BusinessLogic.GoogleReader
 
         public GameDetail.SelectionMethods SelMethod(IList<object> entry)
         {
-            return entry.Count<28 ?GameDetail.SelectionMethods.Other : SelectionMethodConversion[entry[28].ToString()];
+            return entry.Count <= 28 ?GameDetail.SelectionMethods.Other : SelectionMethodConversion[entry[28].ToString()];
         }
 
 
         public int PerceivedDiff(IList<object> entry)
         {
-            return entry.Count < 29 || string.IsNullOrEmpty(entry[29].ToString()) ? 0 : int.Parse(entry[29].ToString());
+            return entry.Count <= 29 || string.IsNullOrEmpty(entry[29].ToString()) ? 0 : int.Parse(entry[29].ToString());
         }
 
         public GameDetail.GameTimeLengths TimeToPlay(IList<object> entry)
         {
-            return entry.Count < 30 ? GameDetail.GameTimeLengths.Unmarked : TimeLengthConversion[entry[30].ToString()];
+            return entry.Count <= 30 ? GameDetail.GameTimeLengths.Unmarked : TimeLengthConversion[entry[30].ToString()];
         }
 
         public int NumberOfPlayers(IList<object> entry)
         {
-            return entry.Count < 31 || string.IsNullOrEmpty(entry[31].ToString()) ? 0 : int.Parse(entry[31].ToString());
+            return entry.Count <= 31 || string.IsNullOrEmpty(entry[31].ToString()) ? 0 : int.Parse(entry[31].ToString());
         }
 
         public int Rounds(IList<object> entry)
         {
-            return entry.Count < 32 || string.IsNullOrEmpty(entry[32].ToString()) ? 0 : int.Parse(entry[32].ToString());
+            return entry.Count <= 32 || string.IsNullOrEmpty(entry[32].ToString()) ? 0 : int.Parse(entry[32].ToString());
         }
 
         public string Comments(IList<object> entry)
         {
-            return entry.Count < 35 || string.IsNullOrEmpty(entry[35].ToString()) ? null : entry[35].ToString(); 
+            return entry.Count <= 35 || string.IsNullOrEmpty(entry[35].ToString()) ? null : entry[35].ToString(); 
         }
 
 
